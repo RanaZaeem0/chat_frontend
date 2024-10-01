@@ -15,10 +15,13 @@ import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { userExited } from "../redux/reducers/auth";
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const Naviagte = useNavigate();
+  const dispatch= useDispatch()
   const [loadingBtn, setLoadingBtn] = useState(false);
   interface CreateuserSchema {
     name: string;
@@ -60,20 +63,14 @@ export default function Login() {
         `${import.meta.env.VITE_BACKEND_URL}user/new`,
         formData,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          withCredentials:true
         }
       );
       console.log(response);
 
       if (response.status >= 200 && response.status < 300) {
         setLoadingBtn(false);
-        localStorage.setItem("refreshToken", response.data.data.refreshToken);
-        localStorage.setItem("username", response.data.data.user.username);
-        localStorage.setItem("userId", response.data.data.user._id);
-        localStorage.setItem("accessToken", response.data.data.accessToken);
-
+        dispatch(userExited(response.data.data))
         Naviagte("/");
       }
     } catch (error: any) {
@@ -116,13 +113,13 @@ export default function Login() {
       if (response.status >= 200 && response.status < 300) {
         setLoadingBtn(false);
        
-       
+       dispatch(userExited(response.data.data))
         toast.success(response.data.message)
 
         Naviagte("/");
       }
     } catch (error: any) {
-  
+   
       
       if (error.response) {
         toast.error(error.response.message)

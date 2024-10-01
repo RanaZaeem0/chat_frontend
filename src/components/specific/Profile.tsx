@@ -8,14 +8,10 @@ function Profile() {
   const userDetails = useSelector((state)=> state.auth)
 
 
-  console.log(userDetails.user);
+  console.log(userDetails.loader);
   
 
-if(!userDetails.loader){
-  return (
-    <div className="">loading ..</div>
-  )
-}
+
 
   
   return (
@@ -34,9 +30,11 @@ if(!userDetails.loader){
             backgroundColor:"gray"
         }}
         />
-        <ProfileCard text={'username'} Heading={`${userDetails.user.username}`}/>
+     
+     {!userDetails.loader ? <h1>loading</h1> :<>
+      <ProfileCard text={'username'} Heading={`${userDetails.user.username}`}/>
         <ProfileCard text={'Bio'} Heading={`${userDetails.user.bio}`}/>
-        <ProfileCard text={'Name'} Heading={`${userDetails.user.name}`}/>
+        <ProfileCard text={'Name'} Heading={`${userDetails.user.name}`}/></>}
     </Stack>
   )
 }

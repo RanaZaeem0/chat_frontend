@@ -13,8 +13,13 @@ import { sampleUsers } from "../../constants/sample";
 import UserItem from "../shared/UserItem";
 
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsNewGroup } from "../../redux/reducers/misc";
 
 const NewGroup = () => {
+
+  const {isNewGroup} = useSelector((state)=> state.misc)
+  const dispatch = useDispatch();
   const groupName = useInputValidation("");
 
   const [selectedMembers, setSelectedMembers] = useState([]);
@@ -31,7 +36,10 @@ const NewGroup = () => {
     );
   };
   
-    const closeHandler = () => {};
+  const closeHandlerNewGroup = () => {
+    dispatch(setIsNewGroup(false))
+  }
+
 
   const submitHandler = () => {
     if (!groupName.value) return toast.error("Group name is required");
@@ -40,12 +48,13 @@ const NewGroup = () => {
       return toast.error("Please Select Atleast 3 Members");
 
 
-    closeHandler();
+    closeHandlerNewGroup();
   };
 
 
+
   return (
-    <Dialog open={true}>
+    <Dialog open={isNewGroup} onClose={closeHandlerNewGroup}>
       <Stack p={{ xs: "1rem", sm: "3rem" }} width={"25rem"} spacing={"2rem"}>
         <DialogTitle textAlign={"center"} variant="h4">
           New Group
@@ -79,7 +88,7 @@ const NewGroup = () => {
             variant="text"
             color="error"
             size="large"
-            onClick={closeHandler}
+            onClick={closeHandlerNewGroup}
           >
             Cancel
           </Button>

@@ -14,13 +14,16 @@ import {
   Menu as MenuIcon,
   Search as SearchIcon,
   Notifications as NotificationsIcon, 
-  Cookie
+  Cookie,
+  ErrorOutlineRounded
 } from "@mui/icons-material";
 import { flushSync } from "react-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useDispatch, useSelector } from "react-redux";
-import { setIsMobile, setIsSearch } from "../../redux/reducers/misc";
+import { setIsMobile, setIsSearch,setIsNewGroup, setIsNotification } from "../../redux/reducers/misc";
 import axios from "axios";
+import {useLogoutUserMutation} from "../../redux/api/api"
+import { Server } from "../../constants/config";
 
 const SearchDailog = lazy(()=> import("../specific/Search"))
 const NotificationDialog = lazy(()=> import("../specific/Notification"))
@@ -30,10 +33,8 @@ const NewGroup  = lazy(()=>import("../specific/NewGroup"))
 export default function Header() {
 
   const [ismobileOpen, setMobileOpen] = useState(false);
-  const [isNotification, setIsNotification] = useState(false);
-  const [isNewGroup,setIsNewGroup ] = useState(false)
   const dispatch = useDispatch()
-  const {isMobile,isSearch} = useSelector((state:RootState)=>state.misc)
+  const {isMobile,isSearch,isNewGroup,isNotification} = useSelector((state:RootState)=>state.misc)
 
 
   const handleMobileNav = () => {
@@ -42,16 +43,19 @@ dispatch(setIsMobile(true))
   ;
 
 
+
   const handleLogout = ()=>{
- axios.post(`${import.meta.env.VITE_BACKEND_URL}user/logout`,{
-   withCredentials:true
- }).then((res)=>{
-   if(res.status >= 200 && res.status < 300){
-     window.location.reload()
-   }
- }).catch((error)=>{
-   console.log("error");
- })
+
+    axios.post(`${Server}user/logout`,
+      {}, {
+      withCredentials: true
+  }).then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+          window.location.reload()
+      }
+  }).catch((error) => {
+      console.log("error",error);
+  })
   }
 
   const openSearchDeilog = () => {
@@ -59,10 +63,10 @@ dispatch(setIsMobile(true))
   };
 
   const navigateGroup = ()=>{
-    setIsNewGroup(prev => !prev)
+    dispatch(setIsNewGroup(true))
   }
   const handleNotification   = ()=>{
-    setIsNotification(prev =>!prev)
+    dispatch(setIsNotification(true))
   }
 
 

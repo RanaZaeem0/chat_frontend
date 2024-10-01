@@ -27,7 +27,13 @@ const api = createApi({
             }),
             providesTags: ['User']
         }),
-
+        logoutUser:builder.mutation({
+            query: () => ({
+                url: "user/logout",
+                method: "POST",
+                credentials: "include"
+            })
+        }),
         sendFriendRequest: builder.mutation({
             query: (data) => ({
                 url: "user/sendFriendRequest",
@@ -155,4 +161,4 @@ const api = createApi({
 
 export default api
 
-export const { useMyChatsQuery, useLazySearchUserQuery} = api
+export const { useMyChatsQuery, useLazySearchUserQuery,useLogoutUserMutation} = api

@@ -10,17 +10,25 @@ import {
 } from "@mui/material";
 import React, { memo } from "react";
 import { sampleNotifications } from "../../constants/sample";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsNotification } from "../../redux/reducers/misc";
 
 
 const Notifications = () => {
 
  const friendRequestHandler = ''
   const sampeNot = sampleNotifications
-  const isNotification = true
+  const {isNotification} = useSelector(state => state.misc)
 
-  const closeHandler = ""
+  const dispatch = useDispatch()
+
+
+  const closeHandlerNotifiaction = () => {
+    dispatch(setIsNotification(false))
+  }
+
   return (
-    <Dialog open={isNotification} onClose={closeHandler}>
+    <Dialog open={isNotification} onClose={closeHandlerNotifiaction}>
       <Stack p={{ xs: "1rem", sm: "2rem" }} maxWidth={"25rem"}>
         <DialogTitle>Notifications</DialogTitle>
 
