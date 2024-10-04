@@ -5,10 +5,9 @@ import { useSelector } from 'react-redux'
 function Profile() {
 
 
-  const userDetails = useSelector((state)=> state.auth)
+  const {user,loader} = useSelector((state)=> state.auth)
 
 
-  console.log(userDetails.loader);
   
 
 
@@ -21,6 +20,7 @@ function Profile() {
       }
     }>
         <Avatar
+        src={user?.avatar}
         sx={{
             width:200,
             height:200,
@@ -31,10 +31,10 @@ function Profile() {
         }}
         />
      
-     {!userDetails.loader ? <h1>loading</h1> :<>
-      <ProfileCard text={'username'} Heading={`${userDetails.user.username}`}/>
-        <ProfileCard text={'Bio'} Heading={`${userDetails.user.bio}`}/>
-        <ProfileCard text={'Name'} Heading={`${userDetails.user.name}`}/></>}
+     {!loader ? <h1>loading</h1> :<>
+      <ProfileCard text={'username'} Heading={`${user?.username}`}/>
+        <ProfileCard text={'Bio'} Heading={`${user?.bio}`}/>
+        <ProfileCard text={'Name'} Heading={`${user?.name}`}/></>}
     </Stack>
   )
 }

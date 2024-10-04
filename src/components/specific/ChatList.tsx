@@ -25,7 +25,6 @@ export default function ChatList({
   const {isError,error,isLoading,data}  = useMyChatsQuery()
 
 
-  console.log(data);
   
   return (
     <Stack width={w} height={"column"}>

@@ -15,11 +15,11 @@ function AvatarCard({ avatar = [], max = 4 }) {
                   alt={`Avatar ${index}`}
                   sx={{
                     position: "absolute",
-                    left:{
-  xs:`${0.5 + index}rem`, 
-  sm:`${index}rem`
+                    left: {
+                      xs: `${0.5 + index}rem`,
+                      sm: `${index}rem`,
                     },
-                                        width: "2rem",
+                    width: "2rem",
                     height: "2rem",
                     border: "2px solid white",
                   }}
