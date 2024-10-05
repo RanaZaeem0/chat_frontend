@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile } from "../../redux/reducers/misc";
 import { useErrors } from "../../hooks/hook";
 import { useMyChatsQuery } from "../../redux/api/api";
+import { getSocket } from "../../socket";
 const Applayout = () => (WrapperComponent) => {
 
   return (props) => {
@@ -16,9 +17,13 @@ const Applayout = () => (WrapperComponent) => {
 
     const  {isError,error,isLoading,isSuccess,data} = useMyChatsQuery("")
     const dispatch = useDispatch();
+
     const {isMobile} = useSelector((state) => state.misc)
-  
-  useErrors()
+
+    const socket = getSocket()
+
+    console.log(socket.id,"soveket");
+    
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
     };

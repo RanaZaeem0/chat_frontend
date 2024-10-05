@@ -7,7 +7,8 @@ import axios from "axios";
 import { Server } from "./constants/config";
 import { useDispatch, useSelector } from "react-redux";
 import { userExited, userNotExited } from "./redux/reducers/auth";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { SocketProvider } from "./socket";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -17,7 +18,6 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   const { loader, user } = useSelector((state) => state.auth);
-  console.log(user,"i am user");
 
   const dispatch = useDispatch();
 
@@ -28,9 +28,8 @@ function App() {
       })
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
-          console.log("enter");
-          console.log(res.data.data);
           dispatch(userExited(res.data.data));
+          toast.success(res.data.message);
         }
       })
       .catch((err) => {
@@ -45,7 +44,9 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<LayoutLoader />}>
         <Routes>
-          <Route>
+          <Route element={<SocketProvider>
+            <ProtectRoute user={user} />
+          </SocketProvider>}>
             <Route path="/" element={<Home />} />
             <Route path="/chat/:id" element={<Chats />} />
             <Route path="/group" element={<Group />} />
