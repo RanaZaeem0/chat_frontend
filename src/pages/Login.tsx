@@ -149,6 +149,7 @@ export default function Login() {
 
   return (
     <Container
+    className="bg-black text-white"
       component="main"
       maxWidth="xs"
       sx={{
@@ -173,7 +174,7 @@ export default function Login() {
             <Typography component="h1" variant="h5">
               Login
             </Typography>
-            <form onSubmit={handleSubmit(loginUser)}>
+            <form className="bg-black" onSubmit={handleSubmit(loginUser)}>
             <TextField
                 margin="normal"
                 required
@@ -181,6 +182,7 @@ export default function Login() {
                 label="username"
                 type="text"
                 variant="outlined"
+                sx={{color:"white"}}
                 {...register("username", {
                   required: "Username is required",
                   pattern: {

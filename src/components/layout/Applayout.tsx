@@ -20,9 +20,7 @@ const Applayout = () => (WrapperComponent) => {
 
     const {isMobile} = useSelector((state) => state.misc)
 
-    const socket = getSocket()
 
-    console.log(socket.id,"soveket");
     
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
@@ -60,7 +58,7 @@ const Applayout = () => (WrapperComponent) => {
             />
           </Grid>
           <Grid item xs={12} sm={8} md={5} lg={6} height={"100%"} sx={{borderRight: "1px solid #ccc",}}>
-            <WrapperComponent {...props} />
+            <WrapperComponent {...props}  />
           </Grid>
           <Grid item md={4} lg={3} height={"100%"} 
           sx={{borderRight: "1px solid #ccc",
