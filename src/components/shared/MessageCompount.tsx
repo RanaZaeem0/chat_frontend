@@ -10,6 +10,11 @@ import { motion } from "framer-motion";
 const MessageComponent = ({ message, user }) => {
   const { sender, content, attachments = [], createdAt } = message;
 
+  console.log(content,"content");
+  console.log(message,"message");
+  
+  
+
   const sameSender = sender?._id === user?._id;
 
   const timeAgo = moment(createdAt).fromNow();

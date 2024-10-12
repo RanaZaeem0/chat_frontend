@@ -73,8 +73,8 @@ const api = createApi({
 
         getMessages: builder.query({
             query: ({ chatId, page }) => ({
-                url: `chat/message/${chatId}?page=${page}`,
-                credentials: true,
+                url: `user/getMessage/${chatId}?page=${page}`,
+                credentials: "include",
 
             })
             , keepUnusedDataFor: 0
@@ -179,5 +179,5 @@ const api = createApi({
 export default api
 
 export const { useMyChatsQuery, useLazySearchUserQuery,useLogoutUserMutation,useSendFriendRequestMutation,
-    useGetNotificationsQuery,useAcceptFriendRequestMutation,useSendAttachmentsMutation,useChatDetailsQuery
+    useGetNotificationsQuery,useAcceptFriendRequestMutation,useSendAttachmentsMutation,useChatDetailsQuery,useGetMessagesQuery
 } = api

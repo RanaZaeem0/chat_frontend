@@ -17,7 +17,7 @@ import MessageComponent from   "../components/shared/MessageCompount" ;
 import FileMenu from '../components/dialogs/FileMenu';
 import { InputBox } from "../components/styles/StyledComponents";
 import { matBlack } from "../constants/color";
-import { useChatDetailsQuery } from "../redux/api/api";
+import { useChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api";
 import { getSocket } from "../socket";
 import { NEW_MESSAGE } from "../constants/events";
 import { useSocket, useSocketEvents } from "../hooks/hook";
@@ -28,7 +28,10 @@ import NewGroup from "../components/specific/NewGroup";
 
 
 
-  const allMessages = []
+  const allMessages = useGetMessagesQuery({chatId})
+
+  
+
 
 const chatDetails = useChatDetailsQuery({chatId,skip:!chatId})  
 
@@ -48,6 +51,7 @@ const eventHandler = {[NEW_MESSAGE]:newMessageHandler}
 
 useSocketEvents(socket,eventHandler)
 
+console.log(allMessages?.data?.data[0]?.messages);
 
 
 const submitHandler  = (e)=>{
@@ -93,9 +97,16 @@ const submitHandler  = (e)=>{
         overflowY: "auto",
       }}
     >
-      {allMessages.map((i) => (
-        <MessageComponent key={i._id} message={i} user={user} />
-      ))}
+ 
+      {!allMessages ? <Skeleton /> :  allMessages?.data?.data[0]?.messages.map((i) => {
+        
+        
+        return <MessageComponent key={i._id} message={i} user={user} />
+ 
+
+
+ 
+ })}
 
       {userTyping && <TypingLoader />}
 
