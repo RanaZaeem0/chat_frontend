@@ -3,6 +3,7 @@ import React from "react";
 import { Add as AddIcon } from "@mui/icons-material";
 function UserItem({ user, handler, handlerIsLoading }) {
   const { name, _id, avatar } = user;
+console.log(handlerIsLoading);
 
   return (
     <ListItem>

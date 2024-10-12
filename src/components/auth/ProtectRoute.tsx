@@ -22,8 +22,6 @@ const ProtectRoute =  ({children,redirect="/login",user}:{
     user:UserData
 })=>{
 
-    console.log(user,"i am user protect ");
-    
 if(!user) return <Navigate to={redirect}/>
 
     return children ? children : <Outlet/>

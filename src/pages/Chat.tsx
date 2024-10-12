@@ -17,16 +17,47 @@ import MessageComponent from   "../components/shared/MessageCompount" ;
 import FileMenu from '../components/dialogs/FileMenu';
 import { InputBox } from "../components/styles/StyledComponents";
 import { matBlack } from "../constants/color";
+import { useChatDetailsQuery } from "../redux/api/api";
+import { getSocket } from "../socket";
+import { NEW_MESSAGE } from "../constants/events";
+import { useSocket, useSocketEvents } from "../hooks/hook";
+import NewGroup from "../components/specific/NewGroup";
 
- function Chats() {
+ function Chat({chatId ,user}) {
 
 
-const allMessages = []
 
-const chatId = ""
 
-const submitHandler  = ()=>{
+  const allMessages = []
 
+const chatDetails = useChatDetailsQuery({chatId,skip:!chatId})  
+
+const members = chatDetails?.data?.data?.members
+
+
+
+
+const socket  = getSocket()
+
+
+const newMessageHandler = useCallback((data)=>{
+console.log(data);
+
+},[])
+const eventHandler = {[NEW_MESSAGE]:newMessageHandler}
+
+useSocketEvents(socket,eventHandler)
+
+
+
+const submitHandler  = (e)=>{
+  console.log(message);
+  e.preventDefault()
+
+  if(!message.trim()) return null;
+
+  socket.emit(NEW_MESSAGE,{chatId,members,message})
+  
 }
 
   const containerRef = useRef(null);
@@ -126,4 +157,4 @@ const submitHandler  = ()=>{
 }
 
 
-export default Applayout()(Chats)
+export default Applayout()(Chat)

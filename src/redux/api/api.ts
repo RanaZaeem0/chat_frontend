@@ -62,7 +62,7 @@ const api = createApi({
         }),
         chatDetails: builder.query({
             query: ({ chatId, populate = false }) => {
-                let url = `chat${chatId}`;
+                let url = `chat/getChatDetails/${chatId}`;
                 if (populate) url += "?populate=true";
                 return {
                     url,
@@ -179,5 +179,5 @@ const api = createApi({
 export default api
 
 export const { useMyChatsQuery, useLazySearchUserQuery,useLogoutUserMutation,useSendFriendRequestMutation,
-    useGetNotificationsQuery,useAcceptFriendRequestMutation,useSendAttachmentsMutation
+    useGetNotificationsQuery,useAcceptFriendRequestMutation,useSendAttachmentsMutation,useChatDetailsQuery
 } = api

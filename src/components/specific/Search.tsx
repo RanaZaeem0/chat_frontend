@@ -19,57 +19,54 @@ import { useNavigate } from "react-router-dom";
 import { Server } from "../../constants/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsSearch } from "../../redux/reducers/misc";
-import { useLazySearchUserQuery, useSendFriendRequestMutation } from "../../redux/api/api";
+import {
+  useLazySearchUserQuery,
+  useSendFriendRequestMutation,
+} from "../../redux/api/api";
 import toast from "react-hot-toast";
 import { useAsyncMutation } from "../../hooks/hook";
 export default function Search() {
+  const [search, setSearch] = useState("");
+  const { isSearch } = useSelector((state: any) => state.misc);
+  const dispatch = useDispatch();
 
-  const [search,setSearch] = useState('')
-  const {isSearch} =  useSelector((state:any)=>state.misc)
-  const dispatch = useDispatch()
+  const [sendFriendRequest] = useSendFriendRequestMutation();
+  const navigate = useNavigate();
+  const [users, setusers] = useState([]);
 
-  const [sendFriendRequest] = useSendFriendRequestMutation() 
-  const navigate = useNavigate()
-  const [users,setusers]= useState([])
-  
-
-  const addFriendHandler = async (id) => {
-    console.log("id",id);
-    
-sendFriendRequest( "sending frinend request",{userId:id})
-}
-
-const [userSearcher] = useLazySearchUserQuery()
+  const addFriendHandler = async (userId) => {
+    console.log("id", userId);
 
 
-useEffect(()=>{
+    sendFriendRequest({userId});
+  };
 
-  const setTimeOutId = setTimeout(() => {
-  userSearcher(search).then(res =>{
-    console.log(res.data.data);
-    setusers(res.data.data)
-    toast.success(res.data.message)
-    
-  }).catch(res=>{
-    console.log(res);
-    
-  })  
-  }, 500);
+  const [userSearcher] = useLazySearchUserQuery();
 
-  return ()=>{
-    clearTimeout(setTimeOutId)
-  }
+  useEffect(() => {
+    const setTimeOutId = setTimeout(() => {
+      userSearcher(search)
+        .then((res) => {
+          console.log(res.data.data);
+          setusers(res.data.data);
+          toast.success(res.data.message);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    }, 500);
 
-},[search])
-
-
-
-
+    return () => {
+      clearTimeout(setTimeOutId);
+    };
+  }, [search]);
 
 
-  const handleCloseSearch  = ()=>{
-    dispatch(setIsSearch(false))
-  }
+  const addFriendHandlerIsLoading = false
+
+  const handleCloseSearch = () => {
+    dispatch(setIsSearch(false));
+  };
 
   return (
     <Dialog open={isSearch} onClose={handleCloseSearch}>
@@ -90,11 +87,11 @@ useEffect(()=>{
         />
 
         <List>
-          {users.map((user) => {
+          {users.map((user,index) => {
             return (
               <UserItem
                 user={user}
-                key={user._id}
+                key={index}
                 handler={addFriendHandler}
                 handlerIsLoading={addFriendHandlerIsLoading}
               />

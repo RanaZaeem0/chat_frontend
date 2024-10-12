@@ -3,6 +3,21 @@ import React from "react";
 import ChatItem from "../shared/ChatItem";
 import { useMyChatsQuery } from "../../redux/api/api";
 
+
+interface ChatList {
+  w:string,
+  chats:string[],
+  chatId:string,
+  onlineUser:string[],
+  newMessagesAlert:[{
+    chatId:string,
+    count:number,
+  }],
+  handleDeleteChat:any
+
+}
+
+
 export default function ChatList({
   w = "100%",
   chats = [],
@@ -15,7 +30,7 @@ export default function ChatList({
     },
   ],
   handleDeleteChat,
-}) 
+}:ChatList) 
 
 
 
@@ -30,7 +45,7 @@ export default function ChatList({
     <Stack width={w} height={"column"}>
       {chats?.map((data,index) => {
         const {avatar, name, _id,groupChat, members} = data;
-
+   
         const newMessageAlert = newMessagesAlert.find(
           (item) => item.chatId === _id
         )
@@ -39,7 +54,7 @@ export default function ChatList({
 
         return (
             <ChatItem 
-            index={index}
+            key={index}
              isOnline={isOnline}
              newMessage={newMessageAlert}
              avatar={avatar}

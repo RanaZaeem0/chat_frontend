@@ -10,13 +10,21 @@ import { setIsMobile } from "../../redux/reducers/misc";
 import { useErrors } from "../../hooks/hook";
 import { useMyChatsQuery } from "../../redux/api/api";
 import { getSocket } from "../../socket";
+import { useParams } from "react-router-dom";
 const Applayout = () => (WrapperComponent) => {
 
   return (props) => {
 
 
-    const  {isError,error,isLoading,isSuccess,data} = useMyChatsQuery("")
+    const params = useParams()
     const dispatch = useDispatch();
+
+    const chatId = params.chatId
+
+    const {user} = useSelector(state => state.auth)
+
+
+    const  {isError,error,isLoading,isSuccess,data} = useMyChatsQuery()
 
     const {isMobile} = useSelector((state) => state.misc)
 
@@ -32,12 +40,11 @@ const Applayout = () => (WrapperComponent) => {
         <Header />
    {
         !isLoading && <Drawer open={isMobile} onClose={handleMobileClose} >
-          <h1>dsadsa</h1>
           <ChatList 
           w="70vw"
-            chats={samepleChats}
-            chatId={'1'}
-            newMessagesAlert={[{chatId:'1',count:4}]}
+            chats={data?.data}
+            chatId={chatId}
+            newMessagesAlert={[{chatId:chatId,count:4}]}
             />
         </Drawer>
    }
@@ -52,13 +59,13 @@ const Applayout = () => (WrapperComponent) => {
             }}
           >
             <ChatList 
-            chats={samepleChats}
-            chatId={'1'}
-            newMessagesAlert={[{chatId:'1',count:4}]}
+            chats={data?.data}
+            chatId={chatId}
+            newMessagesAlert={[{chatId:chatId,count:4}]}
             />
           </Grid>
           <Grid item xs={12} sm={8} md={5} lg={6} height={"100%"} sx={{borderRight: "1px solid #ccc",}}>
-            <WrapperComponent {...props}  />
+            <WrapperComponent {...props}  chatId={chatId} user={user} />
           </Grid>
           <Grid item md={4} lg={3} height={"100%"} 
           sx={{borderRight: "1px solid #ccc",

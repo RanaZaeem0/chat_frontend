@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import "./App.css";
-import { Route, BrowserRouter, Routes } from "react-router-dom";
+import { Route, BrowserRouter, Routes, useParams } from "react-router-dom";
 import { ProtectRoute } from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loader";
 import axios from "axios";
@@ -12,7 +12,7 @@ import { SocketProvider } from "./socket";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
-const Chats = lazy(() => import("./pages/Chat"));
+const Chat = lazy(() => import("./pages/Chat"));
 const Group = lazy(() => import("./pages/Group"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -33,6 +33,10 @@ function App() {
     user:UserData
     loader:boolean
   } = useSelector((state) => state.auth);
+
+
+ 
+  
 
   const dispatch = useDispatch();
 
@@ -67,7 +71,7 @@ function App() {
             }
           >
             <Route path="/" element={<Home />} />
-            <Route path="/chat/:id" element={<Chats />} />
+            <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/group" element={<Group />} />
           </Route>
           <Route

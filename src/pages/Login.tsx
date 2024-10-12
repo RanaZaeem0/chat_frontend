@@ -170,11 +170,11 @@ export default function Login() {
         }}
       >
         {isLogin ? (
-          <>
+          <div className="flex item-center flex-col justify-center ">
             <Typography component="h1" variant="h5">
               Login
             </Typography>
-            <form className="bg-black" onSubmit={handleSubmit(loginUser)}>
+            <form className="" onSubmit={handleSubmit(loginUser)}>
             <TextField
                 margin="normal"
                 required
@@ -182,7 +182,7 @@ export default function Login() {
                 label="username"
                 type="text"
                 variant="outlined"
-                sx={{color:"white"}}
+                className="!text-white"
                 {...register("username", {
                   required: "Username is required",
                   pattern: {
@@ -225,7 +225,7 @@ export default function Login() {
             >
               or signup
             </Button>
-          </>
+          </div>
         ) : (
           <>
             <Typography component="h1" variant="h5">

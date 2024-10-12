@@ -3,8 +3,19 @@ import React, { memo } from "react";
 import { Link } from "../styles/StyledComponents";
 import AvatarCard from "./AvatarCard";
 
+interface ChatItemSchema {
+  avatar: [];
+  name: string;
+  sameSender: boolean;
+  _id: string;
+  groupChat: boolean;
+  isOnline: string;
+  newMessage: string;
+  index: string;
+  handleDeleteChat: () => void;
+}
 
- function ChatItem({
+function ChatItem({
   avatar = [],
   name,
   sameSender,
@@ -12,24 +23,22 @@ import AvatarCard from "./AvatarCard";
   groupChat = false,
   isOnline,
   newMessage,
-  index = 0,
+  index,
   handleDeleteChat,
-}) {
+}: ChatItemSchema) {
   return (
     <Link
-      
-    to={`/chat/${_id}`}
-    index={index}
+      to={`/chat/${_id}`}
+      key={index}
       onContextMenu={(e) => handleDeleteChat(e, _id, groupChat)}
     >
       <div
-
         className=""
         style={{
           display: "flex",
           gap: "1rem",
           alignItems: "start",
-          paddingLeft:"1rem",
+          paddingLeft: "1rem",
           height: "3rem",
           textDecoration: "none",
           justifyContent: "start",
@@ -38,9 +47,9 @@ import AvatarCard from "./AvatarCard";
           position: "relative",
         }}
       >
-        <AvatarCard avatar={avatar}  />
+        <AvatarCard avatar={avatar} />
         <Stack>
-          <Typography>{name }</Typography>
+          <Typography>{name}</Typography>
           {isOnline && (
             <Box
               sx={{
@@ -53,9 +62,7 @@ import AvatarCard from "./AvatarCard";
                 right: "1rem",
                 transform: "translateY(-50%)",
               }}
-            >
-                
-            </Box>
+            ></Box>
           )}
         </Stack>
       </div>
@@ -63,4 +70,4 @@ import AvatarCard from "./AvatarCard";
   );
 }
 
-export default memo(ChatItem)
+export default memo(ChatItem);

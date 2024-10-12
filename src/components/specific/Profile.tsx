@@ -20,7 +20,7 @@ function Profile() {
       }
     }>
         <Avatar
-        src={user?.avatar}
+        src={user?.avatar?.url}
         sx={{
             width:200,
             height:200,
