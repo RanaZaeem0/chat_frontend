@@ -84,9 +84,12 @@ const submitHandler  = (e)=>{
 
   }
 
+
+
   return (
     <Fragment>
     <Stack
+    className="bg-black"
       ref={containerRef}
       boxSizing={"border-box"}
       padding={"1rem"}
@@ -99,7 +102,7 @@ const submitHandler  = (e)=>{
       }}
     >
  
-      {!allMessages ? <Skeleton /> :  allMessages?.data?.data[0]?.messages.map((i) => {
+      {allMessages.isLoading ? <Skeleton /> :  allMessages?.data?.data[0]?.messages.map((i) => {
         
         
         return <MessageComponent key={i._id} message={i} user={user} />
