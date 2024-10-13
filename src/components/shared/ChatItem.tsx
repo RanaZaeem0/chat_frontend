@@ -42,8 +42,8 @@ function ChatItem({
           height: "3rem",
           textDecoration: "none",
           justifyContent: "start",
-          color: sameSender ? "white" : "black",
-          backgroundColor: sameSender ? "black" : "white",
+          color: sameSender ? "black" : "white",
+          backgroundColor: sameSender ? "white" : "#575656d4",
           position: "relative",
         }}
       >

@@ -61,6 +61,7 @@ const submitHandler  = (e)=>{
   if(!message.trim()) return null;
 
   socket.emit(NEW_MESSAGE,{chatId,members,message})
+  setMessage('')
   
 }
 

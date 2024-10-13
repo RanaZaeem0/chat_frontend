@@ -16,7 +16,8 @@ function Profile() {
   return (
     <Stack sx={
       {
-        backgroundColor:"gray"
+        backgroundColor:"black",
+        color:"white"
       }
     }>
         <Avatar
@@ -31,7 +32,7 @@ function Profile() {
         }}
         />
      
-     {!loader ? <h1>loading</h1> :<>
+     {loader ? <h1>loading</h1> :<>
       <ProfileCard text={'username'} Heading={`${user?.username}`}/>
         <ProfileCard text={'Bio'} Heading={`${user?.bio}`}/>
         <ProfileCard text={'Name'} Heading={`${user?.name}`}/></>}
