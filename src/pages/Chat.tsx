@@ -22,13 +22,22 @@ import { getSocket } from "../socket";
 import { NEW_MESSAGE } from "../constants/events";
 import { useSocket, useSocketEvents } from "../hooks/hook";
 import NewGroup from "../components/specific/NewGroup";
-
+import {useInfiniteScrollTop} from "6pp"
  function Chat({chatId ,user}) {
 
 
+  const containerRef = useRef(null);
+  const bottomRef = useRef(null);
+  const [IamTyping, setIamTyping] = useState(false);
+  const [userTyping, setUserTyping] = useState(false);
+  const typingTimeout = useRef(null);
 
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
 
-  const allMessages = useGetMessagesQuery({chatId})
+  const oldMessageChunk = useGetMessagesQuery({chatId,page:page})
 
   
 
@@ -38,7 +47,13 @@ const chatDetails = useChatDetailsQuery({chatId,skip:!chatId})
 const members = chatDetails?.data?.data?.members
 
 
+const {data:oldMessage,setData:setOldMessages} = useInfiniteScrollTop(containerRef,
+oldMessageChunk.data?.data?.totalPages,
+page,
+setPage,
+oldMessageChunk.data?.data?.messages
 
+)
 
 const socket  = getSocket()
 
@@ -51,7 +66,7 @@ const eventHandler = {[NEW_MESSAGE]:newMessageHandler}
 
 useSocketEvents(socket,eventHandler)
 
-console.log(allMessages?.data?.data[0]?.messages);
+console.log(oldMessage,"old mess");
 
 
 const submitHandler  = (e)=>{
@@ -65,16 +80,7 @@ const submitHandler  = (e)=>{
   
 }
 
-  const containerRef = useRef(null);
-  const bottomRef = useRef(null);
-  const [IamTyping, setIamTyping] = useState(false);
-  const [userTyping, setUserTyping] = useState(false);
-  const typingTimeout = useRef(null);
-
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
+ 
 
   const messageOnChange = (e)=>{
     setMessage(e.target.value)
@@ -102,7 +108,7 @@ const submitHandler  = (e)=>{
       }}
     >
  
-      {allMessages.isLoading ? <Skeleton /> :  allMessages?.data?.data[0]?.messages.map((i) => {
+      {oldMessageChunk.isLoading ? <Skeleton /> :  oldMessage.map((i) => {
         
         
         return <MessageComponent key={i._id} message={i} user={user} />
