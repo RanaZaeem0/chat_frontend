@@ -23,9 +23,13 @@ import { NEW_MESSAGE } from "../constants/events";
 import { useSocket, useSocketEvents } from "../hooks/hook";
 import NewGroup from "../components/specific/NewGroup";
 import {useInfiniteScrollTop} from "6pp"
+import { useDispatch, useSelector } from "react-redux";
+import { setIsFileMenu } from "../redux/reducers/misc";
  function Chat({chatId ,user}) {
 
 
+  const dispatch = useDispatch()
+  const {isFileMenu } = useSelector(state =>  state.misc)
   const containerRef = useRef(null);
   const bottomRef = useRef(null);
   const [IamTyping, setIamTyping] = useState(false);
@@ -86,8 +90,10 @@ const submitHandler  = (e)=>{
     setMessage(e.target.value)
   }
 
-  const handleFileOpen  = ()=>{
-
+  const handleFileOpen  = (e)=>{
+   dispatch(setIsFileMenu(true))
+   setFileMenuAnchor(e.currentTarget)  
+   
   }
 
 
@@ -145,6 +151,8 @@ const submitHandler  = (e)=>{
           onClick={handleFileOpen}
         >
           <AttachFileIcon />
+
+       <FileMenu  anchorE1={fileMenuAnchor} chatId={chatId} /> 
         </IconButton>
 
         <InputBox
@@ -171,7 +179,6 @@ const submitHandler  = (e)=>{
       </Stack>
     </form>
 
-    <FileMenu anchorE1={fileMenuAnchor} chatId={chatId} />
   </Fragment>
 
   )
