@@ -4,6 +4,7 @@ import { ListItemText, Menu, MenuItem, MenuList, Tooltip } from "@mui/material";
 import {
   AudioFile as AudioFileIcon,
   Image as ImageIcon,
+  LastPage,
   UploadFile as UploadFileIcon,
   VideoFile as VideoFileIcon,
 } from "@mui/icons-material";
@@ -24,17 +25,28 @@ export default function FileMenu({ anchorE1, chatId }) {
 
   const [sendAttachment] = useSendAttachmentsMutation();
 
-  const fileChangeHandler = (e, key) => {
-    console.log(Array(e.target.files),"file");
-    
+  const fileChangeHandler = async (e, key) => {
     try {
-      const files = Array.from(e.target.files.length);
+      dispatch(setIsFileMenu(false))
+      const toastId = toast.loading("sending files");
+      const files = Array.from(e.target.files);
+      console.log(files, "file");
+
       if (files.length < 0) {
         return toast.error(`plz add ${key}`);
       }
       if (files.length > 5) {
         return toast.error(`Plz Select less ${key} `);
       }
+
+      const myForm = new FormData();
+      myForm.append("chatId", chatId);
+      files.forEach((file) => myForm.append("files", file));
+      console.log("file,", files);
+
+      const res = await sendAttachment(myForm);
+      if (res.data) toast.success(`${key} sent successfully`, { id: toastId });
+      else toast.error(`Failed to send ${key}`, { id: toastId });
     } catch (error) {
       console.log(error);
       toast.error("some thing went wrong ");
@@ -45,8 +57,8 @@ export default function FileMenu({ anchorE1, chatId }) {
   const selectVideo = () => videoRef.current?.click();
   const selectFile = () => fileRef.current?.click();
   const closeFileMenu = () => dispatch(setIsFileMenu(false));
-    console.log(selectImage);
-    
+
+
   return (
     <Menu anchorEl={anchorE1} open={isFileMenu} onClose={closeFileMenu}>
       <div

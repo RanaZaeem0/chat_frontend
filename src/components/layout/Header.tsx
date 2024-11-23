@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Badge,
   Box,
   IconButton,
   Toolbar,
@@ -24,6 +25,7 @@ import { setIsMobile, setIsSearch,setIsNewGroup, setIsNotification } from "../..
 import axios from "axios";
 import {useLogoutUserMutation} from "../../redux/api/api"
 import { Server } from "../../constants/config";
+import { resetNotificationCount } from "../../redux/reducers/chatSlice";
 
 const SearchDailog = lazy(()=> import("../specific/Search"))
 const NotificationDialog = lazy(()=> import("../specific/Notification"))
@@ -35,13 +37,18 @@ export default function Header() {
   const [ismobileOpen, setMobileOpen] = useState(false);
   const dispatch = useDispatch()
   const {isMobile,isSearch,isNewGroup,isNotification} = useSelector((state:RootState)=>state.misc)
-
+  const {notificationCount} = useSelector((state) => state.chat);
 
   const handleMobileNav = () => {
 dispatch(setIsMobile(true))
   }
   ;
 
+  const openNotificationHandler =()=>{
+    
+    dispatch(setIsNotification(true))
+ dispatch(resetNotificationCount())
+  }
 
 
   const handleLogout = ()=>{
@@ -65,9 +72,7 @@ dispatch(setIsMobile(true))
   const navigateGroup = ()=>{
     dispatch(setIsNewGroup(true))
   }
-  const handleNotification   = ()=>{
-    dispatch(setIsNotification(true))
-  }
+
 
 
 
@@ -113,13 +118,13 @@ dispatch(setIsMobile(true))
             }}
           ></Box>
           <Box>
-          <IconBtn
+          <IconBtn value={notificationCount}
                 title={"Notifications"}
                 icon={<NotificationsIcon />}
-               onClick={handleNotification}
+               onClick={openNotificationHandler}
               />
             <IconBtn title={"search"} icon={<SearchIcon />} onClick={openSearchDeilog}/>
-            <IconBtn title={"Chat"} icon={<AddIcon />} onClick={handleNotification} />
+            {/* <IconBtn  title={"Chat"} icon={<AddIcon />} onClick={openNotificationHandler} /> */}
             <IconBtn title={"Group"} icon={<GroupIcon />} onClick={navigateGroup} />
             <IconBtn  title={"logout"} icon={<LogoutIcon />} onClick={handleLogout}/>
           </Box>
@@ -150,7 +155,7 @@ dispatch(setIsMobile(true))
 }
 
 
-const IconBtn = ({title,onClick,icon})=>{
+const IconBtn = ({title,onClick,icon,value})=>{
 
   return (
 
@@ -159,8 +164,10 @@ const IconBtn = ({title,onClick,icon})=>{
         color="inherit"
         size="large"
         onClick={onClick}
-      >
-        {icon}
+      >{
+        value ? <Badge badgeContent={value} color="error">{icon}</Badge>
+      : icon}
+     
       </IconButton>
     </Tooltip>
   )

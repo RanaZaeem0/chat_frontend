@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import "./App.css";
-import { Route, BrowserRouter, Routes, useParams } from "react-router-dom";
+import { Route, BrowserRouter, Routes,  } from "react-router-dom";
 import { ProtectRoute } from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loader";
 import axios from "axios";

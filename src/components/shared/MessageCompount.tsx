@@ -7,7 +7,7 @@ import { fileFormat } from "../../lib/features.ts";
 import {RenderAttachment} from "../shared/RenderAttachment.tsx";
 import { motion } from "framer-motion";
 
-const MessageComponent = ({ message, user }) => {
+const MessageComponent = ({ message, user,key }) => {
   const { sender, content, attachments = [], createdAt } = message;
 
 
@@ -29,6 +29,7 @@ const MessageComponent = ({ message, user }) => {
         padding: "0.5rem",
         width: "fit-content",
       }}
+      key={key}
     >
       {!sameSender && (
         <Typography color={lightBlue} fontWeight={"600"} variant="caption">

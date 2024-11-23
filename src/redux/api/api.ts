@@ -82,7 +82,7 @@ const api = createApi({
 
         sendAttachments: builder.mutation({
             query: (data) => ({
-                url: "chat/message",
+                url: "chat/sendAttachment",
                 method: "POST",
                 credentials: "include",
                 body: data,

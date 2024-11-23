@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Title from "../shared/Title";
 import Header from "./Header";
 import { Drawer, Grid } from "@mui/material";
@@ -7,14 +7,16 @@ import { samepleChats } from "../../constants/sample";
 import Profile from "../specific/Profile";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile } from "../../redux/reducers/misc";
-import { useErrors } from "../../hooks/hook";
+import { useErrors, useSocketEvents } from "../../hooks/hook";
 import { useMyChatsQuery } from "../../redux/api/api";
 import { getSocket } from "../../socket";
 import { useParams } from "react-router-dom";
+import { NEW_MESSAGE_ALERT } from "../../constants/events";
 const Applayout = () => (WrapperComponent) => {
   return (props) => {
     const params = useParams();
     const dispatch = useDispatch();
+    const socket = getSocket()
 
     const chatId = params.chatId;
 
@@ -27,6 +29,16 @@ const Applayout = () => (WrapperComponent) => {
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
     };
+    const newMessageAlertListener = useCallback(
+      (data)=>{
+        if(data.chatId == chatId) return;
+
+      }
+,[chatId]    )
+    const eventHandlers ={
+      [NEW_MESSAGE_ALERT]:newMessageAlertListener
+    }
+    useSocketEvents(socket,eventHandlers)
 
     return (
       <div className="">
@@ -76,7 +88,7 @@ const Applayout = () => (WrapperComponent) => {
             className=" max-lg: "
             sx={{
               borderRight: "1px solid #ccc",
-            	 display: {xs: 'block', xl: 'none'  }
+            	 display: {xs: 'none', md: 'none',lg:"block",xl:"block"  }
             }}
           >
             <Profile />
