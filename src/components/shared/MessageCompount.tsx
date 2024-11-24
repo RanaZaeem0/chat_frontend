@@ -1,13 +1,18 @@
 
 import { Box, Typography } from "@mui/material";
-import React, { memo } from "react";
-import { lightBlue } from "../../constants/color";
+import  { memo } from "react";
+import {  lightblack,  lightGreen } from "../../constants/color";
 import moment from "moment";
 import { fileFormat } from "../../lib/features.ts";
 import {RenderAttachment} from "../shared/RenderAttachment.tsx";
 import { motion } from "framer-motion";
+import { UserDataType } from "../../types/types.ts";
 
-const MessageComponent = ({ message, user,key }) => {
+const MessageComponent = ({ message, user,key }:{
+  message:any,
+  user:UserDataType,
+  key:any
+}) => {
   const { sender, content, attachments = [], createdAt } = message;
 
 
@@ -23,24 +28,20 @@ const MessageComponent = ({ message, user,key }) => {
       whileInView={{ opacity: 1, x: 0 }}
       style={{
         alignSelf: sameSender ? "flex-end" : "flex-start",
-        backgroundColor: "white",
-        color: "black",
+        backgroundColor: sameSender ? lightGreen:lightblack ,
+        color: "white",
         borderRadius: "5px",
         padding: "0.5rem",
         width: "fit-content",
       }}
       key={key}
     >
-      {!sameSender && (
-        <Typography color={lightBlue} fontWeight={"600"} variant="caption">
-          {sender.name}
-        </Typography>
-      )}
+  
 
       {content && <Typography>{content}</Typography>}
 
       {attachments.length > 0 &&
-        attachments.map((attachment, index) => {
+        attachments.map((attachment:any, index:number) => {
           const url = attachment.url;
           const file = fileFormat(url);
 

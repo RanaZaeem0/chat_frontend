@@ -1,35 +1,39 @@
-import React, { useRef } from "react";
+import  { useRef } from "react";
 import { ListItemText, Menu, MenuItem, MenuList, Tooltip } from "@mui/material";
 
 import {
   AudioFile as AudioFileIcon,
   Image as ImageIcon,
-  LastPage,
+
   UploadFile as UploadFileIcon,
   VideoFile as VideoFileIcon,
 } from "@mui/icons-material";
-import toast, { ToastIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useSendAttachmentsMutation } from "../../redux/api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFileMenu } from "../../redux/reducers/misc";
+import { RootState } from "../../redux/reducers/store";
 
-export default function FileMenu({ anchorE1, chatId }) {
-  const imageRef = useRef(null);
-  const audioRef = useRef(null);
-  const videoRef = useRef(null);
-  const fileRef = useRef(null);
+export default function FileMenu({ anchorE1, chatId }:{
+  chatId:string,
+  anchorE1:any
+}) {
+  const imageRef = useRef<HTMLInputElement | null>(null);;
+  const audioRef = useRef<HTMLInputElement | null>(null);;
+  const videoRef = useRef<HTMLInputElement | null>(null);;
+  const fileRef = useRef<HTMLInputElement | null>(null);;
 
-  const { isFileMenu } = useSelector((state) => state.misc);
+  const { isFileMenu } = useSelector((state:RootState) => state.misc);
 
   const dispatch = useDispatch();
 
   const [sendAttachment] = useSendAttachmentsMutation();
 
-  const fileChangeHandler = async (e, key) => {
+  const fileChangeHandler = async (e: React.ChangeEvent<HTMLInputElement>, key:any) => {
     try {
       dispatch(setIsFileMenu(false))
       const toastId = toast.loading("sending files");
-      const files = Array.from(e.target.files);
+      const files: File[] = Array.from(e.target.files || []);
       console.log(files, "file");
 
       if (files.length < 0) {

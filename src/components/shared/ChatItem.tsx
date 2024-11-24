@@ -1,7 +1,8 @@
 import { Box, Stack, Typography } from "@mui/material";
-import React, { memo } from "react";
+import  { memo } from "react";
 import { Link } from "../styles/StyledComponents";
 import AvatarCard from "./AvatarCard";
+import { lightblack, matBlack } from "../../constants/color";
 
 interface ChatItemSchema {
   avatar: [];
@@ -10,9 +11,9 @@ interface ChatItemSchema {
   _id: string;
   groupChat: boolean;
   isOnline: string;
-  newMessage: string;
-  index: string;
-  handleDeleteChat: () => void;
+  newMessage: any;
+  index: number;
+  handleDeleteChat: (e:any, _id:any, groupChat:boolean) => void;
 }
 
 function ChatItem({
@@ -22,7 +23,6 @@ function ChatItem({
   _id,
   groupChat = false,
   isOnline,
-  newMessage,
   index,
   handleDeleteChat,
 }: ChatItemSchema) {
@@ -43,7 +43,7 @@ function ChatItem({
           textDecoration: "none",
           justifyContent: "start",
           color: sameSender ? "black" : "white",
-          backgroundColor: sameSender ? "white" : "black",
+          backgroundColor: sameSender ? lightblack : matBlack,
           position: "relative",
         }}
       >

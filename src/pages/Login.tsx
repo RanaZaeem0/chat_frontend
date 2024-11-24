@@ -9,20 +9,23 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { userExited } from "../redux/reducers/auth";
+
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
-  const Naviagte = useNavigate();
-  const dispatch= useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loadingBtn, setLoadingBtn] = useState(false);
+
+  // Typing the forms
   interface CreateuserSchema {
     name: string;
     username: string;
@@ -30,118 +33,101 @@ export default function Login() {
     avatar: File;
     bio: string;
   }
+
+  interface loginSchema {
+    username: string;
+    password: string;
+  }
+
+  // Use the `useForm` hook with the appropriate schema type
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm<CreateuserSchema | loginSchema>();
 
-  interface loginSchema {
-    username:string,
-    password:string
-  }
+  console.log(error);
 
   const avatar = watch("avatar");
   const avatarPreview =
     avatar && avatar[0] ? URL.createObjectURL(avatar[0]) : "avatar";
 
-  const createUser = async (data: CreateuserSchema) => {
+  const createUser: SubmitHandler<CreateuserSchema> = async (data) => {
     setLoadingBtn(true);
     try {
-      const formData = new FormData();
-
-      formData.append("username", data.username);
-      formData.append("bio", data.bio);
-      formData.append("name", data.name);
-      formData.append("avatar", data.avatar[0]);
-      formData.append("password", data.password);
-
-      console.log(formData);
+      const userData = {
+        username: data.username,
+        password: data.password,
+        bio: data.bio,
+        name: data.name,
+      };
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}user/new`,
-        formData,
+        userData,
         {
-          withCredentials:true
+          withCredentials: true,
         }
       );
       console.log(response);
 
       if (response.status >= 200 && response.status < 300) {
         setLoadingBtn(false);
-        dispatch(userExited(response.data.data))
-        Naviagte("/");
+        dispatch(userExited(response.data.data));
+        navigate("/");
       }
     } catch (error: any) {
+      setLoadingBtn(false);
       if (error.response) {
-        setLoadingBtn(false);
-
-        // Server responded with a status other than 200 range
         console.log(
           `Error response from server: ${error.response.status} - ${error.response.data}`
         );
         setError(`Error: ${error.response.data.message || "Server Error"}`);
       } else if (error.request) {
-        // No response received from server
         console.log("No response received from server", error.request);
         setError("No response received from server. Please try again later.");
       } else {
-        // Other errors
         console.log(`Error during signup: ${error.message}`);
         setError(`Error: ${error.message}`);
       }
     }
   };
 
-
-  const loginUser = async (data:loginSchema)=> {
+  const loginUser: SubmitHandler<loginSchema> = async (data) => {
+    setLoadingBtn(true);
     try {
-      
-     const {username ,password} = data
-
-      console.log(data);
-
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}user/login`,
         data,
         {
-            withCredentials: true,
-          }    
+          withCredentials: true,
+        }
       );
 
       if (response.status >= 200 && response.status < 300) {
         setLoadingBtn(false);
-       
-       dispatch(userExited(response.data.data))
-        toast.success(response.data.message)
-
-        Naviagte("/");
+        dispatch(userExited(response.data.data));
+        toast.success(response.data.message);
+        navigate("/");
       }
     } catch (error: any) {
-   
-      
+      setLoadingBtn(false);
       if (error.response) {
-        toast.error(error.response.message)
-        setLoadingBtn(false);
-
-        // Server responded with a status other than 200 range
+        toast.error(error.response.message);
         console.log(
           `Error response from server: ${error.response.status} - ${error.response.data}`
         );
         setError(`Error: ${error.response.data.message || "Server Error"}`);
       } else if (error.request) {
-        // No response received from server
         console.log("No response received from server", error.request);
         setError("No response received from server. Please try again later.");
       } else {
-        // Other errors
         console.log(`Error during signup: ${error.message}`);
         setError(`Error: ${error.message}`);
       }
     }
-
-  }
+  };
 
   const handleLogin = () => {
     setIsLogin(!isLogin);
@@ -149,7 +135,7 @@ export default function Login() {
 
   return (
     <Container
-    className="bg-black text-white"
+      className="bg-black text-white"
       component="main"
       maxWidth="xs"
       sx={{
@@ -175,7 +161,7 @@ export default function Login() {
               Login
             </Typography>
             <form className="" onSubmit={handleSubmit(loginUser)}>
-            <TextField
+              <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -196,7 +182,7 @@ export default function Login() {
                   {errors.username.message}
                 </Typography>
               )}
-               <TextField
+              <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -241,7 +227,6 @@ export default function Login() {
                   }}
                   src={avatarPreview}
                 />
-
                 <IconButton
                   sx={{
                     position: "absolute",
@@ -255,21 +240,17 @@ export default function Login() {
                   }}
                   component="label"
                 >
-                  <>
-                    <CameraAltIcon />
-                    <VisuallyHiddenInput
-                      type="file"
-                      accept="image/*"
-                      {...register("avatar", {
-                        required: true,
-                      })}
-                    />
-                    {errors && (
-                      <Typography variant="body2" color="error">
-                        {errors.avatar?.message}
-                      </Typography>
-                    )}
-                  </>
+                  <CameraAltIcon />
+                  <VisuallyHiddenInput
+                    type="file"
+                    accept="image/*"
+                    {...register("avatar", { required: true })}
+                  />
+                  {errors.avatar && (
+                    <Typography variant="body2" color="error">
+                      Avatar is required
+                    </Typography>
+                  )}
                 </IconButton>
               </Stack>
               <TextField
@@ -278,14 +259,11 @@ export default function Login() {
                 fullWidth
                 label="name"
                 variant="outlined"
-                {...register("name", {
-                  required: true,
-                  minLength: 2,
-                })}
-              ></TextField>
+                {...register("name", { required: true, minLength: 2 })}
+              />
               {errors && (
                 <Typography variant="body2" color="error">
-                  {errors.name?.message}
+                  adas
                 </Typography>
               )}
               <TextField
@@ -295,14 +273,11 @@ export default function Login() {
                 label="Bio"
                 type="text"
                 variant="outlined"
-                {...register("bio", {
-                  required: true,
-                  minLength: 2,
-                })}
-              ></TextField>
-              {errors && (
+                {...register("bio", { required: true, minLength: 2 })}
+              />
+              {errors.bio && (
                 <Typography variant="body2" color="error">
-                  {errors.bio?.message}
+                  Bio is required
                 </Typography>
               )}
               <TextField
@@ -319,10 +294,10 @@ export default function Login() {
                     message: "Username must contain only letters and numbers",
                   },
                 })}
-              ></TextField>
+              />
               {errors.username && (
                 <Typography variant="body2" color="error">
-                  {errors.username.message}
+                  Username must contain only letters and numbers
                 </Typography>
               )}
               <TextField
@@ -333,17 +308,29 @@ export default function Login() {
                 type="password"
                 variant="outlined"
                 {...register("password", {
-                  required: true,
-                  minLength: 6,
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters long",
+                  },
                 })}
-              ></TextField>
+              />
               {errors.password && (
                 <Typography variant="body2" color="error">
-                  Plz make strong password and lastest 6 carateer
+                  Password is required and must be at least 6 characters
                 </Typography>
               )}
-              <Button variant="contained" type="submit">
-                SignUp{" "}
+              <Button
+                sx={{
+                  width: "100%",
+                  marginTop: 2,
+                  padding: "10px",
+                  backgroundColor: "red",
+                }}
+                variant="contained"
+                type="submit"
+              >
+                {loadingBtn ? "Loading..." : "SignUp"}
               </Button>
             </form>
             <Button
@@ -352,7 +339,7 @@ export default function Login() {
               variant="text"
               onClick={handleLogin}
             >
-              or Login
+              or login
             </Button>
           </>
         )}

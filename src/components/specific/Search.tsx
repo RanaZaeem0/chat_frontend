@@ -34,7 +34,7 @@ export default function Search() {
   const navigate = useNavigate();
   const [users, setusers] = useState([]);
 
-  const addFriendHandler = async (userId) => {
+  const addFriendHandler = async (userId:any) => {
     console.log("id", userId);
 
 

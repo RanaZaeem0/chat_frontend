@@ -1,36 +1,34 @@
-import React, { useCallback } from "react";
-import Title from "../shared/Title";
-import Header from "./Header";
+import  { useCallback } from "react";
 import { Drawer, Grid } from "@mui/material";
 import ChatList from "../specific/ChatList";
-import { samepleChats } from "../../constants/sample";
-import Profile from "../specific/Profile";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile } from "../../redux/reducers/misc";
-import { useErrors, useSocketEvents } from "../../hooks/hook";
+import {  useSocketEvents } from "../../hooks/hook";
 import { useMyChatsQuery } from "../../redux/api/api";
 import { getSocket } from "../../socket";
 import { useParams } from "react-router-dom";
 import { NEW_MESSAGE_ALERT } from "../../constants/events";
-const Applayout = () => (WrapperComponent) => {
-  return (props) => {
+import { RootState } from "../../redux/reducers/store";
+const Applayout = () => (WrapperComponent:any) => {
+  return (props :any) => {
     const params = useParams();
     const dispatch = useDispatch();
     const socket = getSocket()
 
-    const chatId = params.chatId;
+    const chatId :string | undefined = params.chatId;
 
-    const { user } = useSelector((state) => state.auth);
+    const { user } = useSelector((state:RootState) => state.auth);
 
-    const { isError, error, isLoading, isSuccess, data } = useMyChatsQuery();
+    const {  isLoading,  data } = useMyChatsQuery({});
+console.log("render applayout");
 
-    const { isMobile } = useSelector((state) => state.misc);
+    const { isMobile } = useSelector((state:RootState) => state.misc);
 
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
     };
     const newMessageAlertListener = useCallback(
-      (data)=>{
+      (data :any)=>{
         if(data.chatId == chatId) return;
 
       }
@@ -42,7 +40,6 @@ const Applayout = () => (WrapperComponent) => {
 
     return (
       <div className="">
-        <Header />
         {!isLoading && (
           <Drawer open={isMobile} onClose={handleMobileClose}>
             <ChatList
@@ -53,7 +50,7 @@ const Applayout = () => (WrapperComponent) => {
             />
           </Drawer>
         )}
-        <Grid container className="bg-black" height={"calc(100vh - 4rem)"}>
+        <Grid container className="bg-black" height={"calc(100vh - 0rem)"}>
           <Grid
             item
             sm={4}
@@ -64,9 +61,12 @@ const Applayout = () => (WrapperComponent) => {
             }}
           >
             <ChatList
+            w={"100%"}
+            handleDeleteChat={[""]}
+            onlineUser={[""]}
               chats={data?.data}
               chatId={chatId}
-              newMessagesAlert={[{ chatId: chatId, count: 4 }]}
+              newMessagesAlert={[{  chatId, count: 4 }]}
             />
           </Grid>
           <Grid
@@ -74,25 +74,13 @@ const Applayout = () => (WrapperComponent) => {
             xs={12}
             sm={8}
             md={5}
-            lg={6}
+            lg={9}
             height={"100%"}
             sx={{ borderRight: "1px solid #ccc" }}
           >
             <WrapperComponent {...props} chatId={chatId} user={user} />
           </Grid>
-          <Grid
-            item
-            md={4}
-            lg={1}
-            height={"100%"}
-            className=" max-lg: "
-            sx={{
-              borderRight: "1px solid #ccc",
-            	 display: {xs: 'none', md: 'none',lg:"block",xl:"block"  }
-            }}
-          >
-            <Profile />
-          </Grid>
+          
         </Grid>
       </div>
     );

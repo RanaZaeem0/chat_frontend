@@ -1,11 +1,11 @@
 import { Avatar, Stack,Typography} from '@mui/material'
-import React from 'react'
+import { RootState } from '../../redux/reducers/store'
 import { useSelector } from 'react-redux'
 
 function Profile() {
 
 
-  const {user,loader} = useSelector((state)=> state.auth)
+  const {user,loader} = useSelector((state:RootState)=> state.auth)
 
 
   

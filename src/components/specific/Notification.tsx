@@ -8,21 +8,20 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { memo } from "react";
-import { sampleNotifications } from "../../constants/sample";
+import  { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsNotification } from "../../redux/reducers/misc";
 import {
   useAcceptFriendRequestMutation,
   useGetNotificationsQuery,
 } from "../../redux/api/api";
-import { useAsyncMutation } from "../../hooks/hook";
+import { RootState } from "../../redux/reducers/store";
 import toast from "react-hot-toast";
 
 const Notifications = () => {
   const [friendRequest] = useAcceptFriendRequestMutation();
 
-  const friendRequestHandler = async (e) => {
+  const friendRequestHandler = async (e:any) => {
     try {
       const response = await friendRequest(e);
       const toastId = toast.loading("upadating data...");
@@ -41,12 +40,11 @@ const Notifications = () => {
       console.log(error);
     }
   };
-  const sampeNot = sampleNotifications;
-  const { isNotification } = useSelector((state) => state.misc);
+  const { isNotification } = useSelector((state:RootState) => state.misc);
 
   const dispatch = useDispatch();
 
-  const { isLoading, data, isError, error } = useGetNotificationsQuery({});
+  const { isLoading, data, } = useGetNotificationsQuery({});
 
   const closeHandlerNotifiaction = () => {
     dispatch(setIsNotification(false));
@@ -62,7 +60,7 @@ const Notifications = () => {
         ) : (
           <>
             {data.data.length > 0 ? (
-              data.data.map((i) => (
+              data.data.map((i:any) => (
                 <NotificationItem
                   sender={i.sender}
                   _id={i._id}
@@ -80,8 +78,18 @@ const Notifications = () => {
   );
 };
 
-const NotificationItem = memo(({ sender, _id, handler }) => {
+const NotificationItem = memo(({ sender, _id, handler,key }:{
+  sender:any,
+  _id:string,
+  handler:({ requestId, accept }:{
+    requestId:string,
+    accept:boolean
+  })=>void,
+  key:any
+}) => {
   const { name, avatar } = sender;
+  console.log(avatar);
+  
   return (
     <ListItem>
       <Stack

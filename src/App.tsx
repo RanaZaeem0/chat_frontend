@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import "./App.css";
-import { Route, BrowserRouter, Routes,  } from "react-router-dom";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 import { ProtectRoute } from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loader";
 import axios from "axios";
@@ -9,35 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { userExited, userNotExited } from "./redux/reducers/auth";
 import toast, { Toaster } from "react-hot-toast";
 import { SocketProvider } from "./socket";
-
+import {RootState} from "./redux/reducers/store"
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Chat = lazy(() => import("./pages/Chat"));
 const Group = lazy(() => import("./pages/Group"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-interface UserData {
-  _id: string;
-  fullName: string;
-  bio: string;
-  createdAt: string;
-  updatedAt: string;
-  avatar: {
-    url: string;
-    public_id: string;
-  };
-}
-
 function App() {
-  const { loader, user }:{
-    user:UserData
-    loader:boolean
-  } = useSelector((state) => state.auth);
-
-
- 
-  
-
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,16 +27,17 @@ function App() {
       .then((res) => {
         if (res.status >= 200 && res.status < 300) {
           dispatch(userExited(res.data.data));
-          toast.success(res.data.message);
+          if (!user) {
+            toast.success(res.data.message);
+          }
         }
       })
       .catch((err) => {
-        console.log(err);
-        console.log("exit erooor");
-
+        console.error(err);
         dispatch(userNotExited());
       });
   }, []);
+console.log("render app");
 
   return (
     <BrowserRouter>
@@ -77,11 +57,11 @@ function App() {
           <Route
             path="/login"
             element={
-              <ProtectRoute user={!user} redirect="/">
+            <ProtectRoute user={!user} redirect="/">
                 <Login />
               </ProtectRoute>
             }
-          ></Route>
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

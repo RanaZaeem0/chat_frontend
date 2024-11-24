@@ -8,30 +8,31 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { sampleUsers } from "../../constants/sample";
 import UserItem from "../shared/UserItem";
 
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsNewGroup } from "../../redux/reducers/misc";
+import { RootState } from "../../redux/reducers/store";
 
 const NewGroup = () => {
 
-  const {isNewGroup} = useSelector((state)=> state.misc)
+  const {isNewGroup} = useSelector((state:RootState)=> state.misc)
   const dispatch = useDispatch();
   const groupName = useInputValidation("");
 
   const [selectedMembers, setSelectedMembers] = useState([]);
 
-  const isLoadingNewGroup = "";
+  const [isLoadingNewGroup,setIsLoadingNewGroup] = useState(false);
 
   const UserFriend = sampleUsers;
 
-  const selectMemberHandler = (id) => {
-    setSelectedMembers((prev) =>
+  const selectMemberHandler = (id:string) => {
+    setSelectedMembers((prev:any) =>
       prev.includes(id)
-        ? prev.filter((currElement) => currElement !== id)
+        ? prev.filter((currElement:any) => currElement !== id)
         : [...prev, id]
     );
   };
@@ -46,7 +47,7 @@ const NewGroup = () => {
 
     if (selectedMembers.length < 2)
       return toast.error("Please Select Atleast 3 Members");
-
+    setIsLoadingNewGroup(false)
 
     closeHandlerNewGroup();
   };
@@ -76,6 +77,7 @@ const NewGroup = () => {
               <UserItem
                 user={i}
                 key={i._id}
+                handlerIsLoading={true}
                 handler={selectMemberHandler}
                 isAdded={selectedMembers.includes(i._id)}
               />

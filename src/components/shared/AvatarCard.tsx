@@ -1,5 +1,4 @@
 import { Avatar, AvatarGroup, Box, Stack } from "@mui/material";
-import React from "react";
 
 function AvatarCard({ avatar = [], max = 4 }) {
 

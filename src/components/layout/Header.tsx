@@ -7,25 +7,22 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { lazy, Suspense, useState } from "react";
+import  { lazy, ReactNode, Suspense } from "react";
 import {
-  Add as AddIcon,
-  Flag,
+   
   Group as GroupIcon,
   Menu as MenuIcon,
   Search as SearchIcon,
   Notifications as NotificationsIcon, 
-  Cookie,
-  ErrorOutlineRounded
 } from "@mui/icons-material";
-import { flushSync } from "react-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobile, setIsSearch,setIsNewGroup, setIsNotification } from "../../redux/reducers/misc";
 import axios from "axios";
-import {useLogoutUserMutation} from "../../redux/api/api"
 import { Server } from "../../constants/config";
 import { resetNotificationCount } from "../../redux/reducers/chatSlice";
+import { RootState } from "../../redux/reducers/store";
+import { lightGreen } from "../../constants/color";
 
 const SearchDailog = lazy(()=> import("../specific/Search"))
 const NotificationDialog = lazy(()=> import("../specific/Notification"))
@@ -34,10 +31,9 @@ const NewGroup  = lazy(()=>import("../specific/NewGroup"))
 
 export default function Header() {
 
-  const [ismobileOpen, setMobileOpen] = useState(false);
   const dispatch = useDispatch()
-  const {isMobile,isSearch,isNewGroup,isNotification} = useSelector((state:RootState)=>state.misc)
-  const {notificationCount} = useSelector((state) => state.chat);
+  const {isSearch,isNewGroup,isNotification} = useSelector((state:RootState)=>state.misc)
+  const {notificationCount} = useSelector((state:RootState) => state.chat);
 
   const handleMobileNav = () => {
 dispatch(setIsMobile(true))
@@ -85,7 +81,7 @@ dispatch(setIsMobile(true))
         height: "4rem",
       }}
     >
-      <AppBar position="static" sx={{ bgColor: "red" }}>
+      <AppBar position="static" sx={{bgcolor:lightGreen}}>
         <Toolbar>
           <Typography
             variant="h6"
@@ -155,7 +151,12 @@ dispatch(setIsMobile(true))
 }
 
 
-const IconBtn = ({title,onClick,icon,value})=>{
+const IconBtn = ({title,onClick,icon,value}:{
+  title:string,
+  onClick:()=> void,
+  icon:ReactNode,
+  value?:number
+})=>{
 
   return (
 

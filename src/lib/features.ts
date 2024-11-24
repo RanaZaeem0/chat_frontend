@@ -20,7 +20,11 @@ const fileFormat = (url = "") => {
   
     return "file";
   };
-  const getOrSaveFromStorage = ({ key, value, get }) => {
+  const getOrSaveFromStorage = ({ key, value, get }:{
+    key:string,
+    value?:any,
+    get:boolean
+  }) => {
     if (get)
       return localStorage.getItem(key)
         ? JSON.parse(localStorage.getItem(key))

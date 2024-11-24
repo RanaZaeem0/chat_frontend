@@ -1,10 +1,15 @@
 import { Avatar, IconButton, ListItem, Stack, Typography } from "@mui/material";
-import React from "react";
 import { Add as AddIcon } from "@mui/icons-material";
-function UserItem({ user, handler, handlerIsLoading }) {
-  const { name, _id, avatar } = user;
-console.log(handlerIsLoading);
-
+import { UserDataType } from "../../types/types";
+function UserItem({ user, handler, handlerIsLoading,isAdded }:{
+  user:any,
+  handler:(id:any)=> void,
+  handlerIsLoading:boolean,
+  isAdded:any
+}) {
+  const { name, _id, } = user;
+  console.log(isAdded);
+  
   return (
     <ListItem>
       <Stack

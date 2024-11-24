@@ -1,4 +1,4 @@
-import React, {
+import {
   Fragment,
   useCallback,
   useEffect,
@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import AppLayout from "../components/layout/Applayout";
 import { IconButton, Skeleton, Stack } from "@mui/material";
-import { grayColor, orange } from "../constants/color";
+import {  lightGreen, matBlack } from "../constants/color";
 import {
   AttachFile as AttachFileIcon,
   Send as SendIcon,
@@ -25,30 +25,34 @@ import {
   STOP_TYPING,
 } from "../constants/events";
 import { useChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api";
-import { useErrors, useSocketEvents } from "../hooks/hook";
+import {  useSocketEvents } from "../hooks/hook";
 import { useInfiniteScrollTop } from "6pp";
 import { useDispatch } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc";
 import { removeNewMessagesAlert } from "../redux/reducers/chatSlice";
 import { TypingLoader } from "../components/layout/Loader";
 import { useNavigate } from "react-router-dom";
+import { UserDataType ,AlertData,SendMessageType} from "../types/types";
 
-const Chat = ({ chatId, user }) => {
+const Chat = ({ chatId, user }:{
+  chatId:string,
+  user:UserDataType
+}) => {
   const socket = getSocket();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const containerRef = useRef(null);
-  const bottomRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);;
+  const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<SendMessageType[]>([]);
   const [page, setPage] = useState(1);
   const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
 
   const [IamTyping, setIamTyping] = useState(false);
   const [userTyping, setUserTyping] = useState(false);
-  const typingTimeout = useRef(null);
+  const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId });
 
@@ -66,10 +70,12 @@ const Chat = ({ chatId, user }) => {
     { isError: chatDetails.isError, error: chatDetails.error },
     { isError: oldMessagesChunk.isError, error: oldMessagesChunk.error },
   ];
+  console.log(errors);
+  
 
   const members = chatDetails?.data?.data?.members;
 
-  const messageOnChange = (e) => {
+  const messageOnChange = (e:any) => {
     setMessage(e.target.value);
 
     if (!IamTyping) {
@@ -82,15 +88,15 @@ const Chat = ({ chatId, user }) => {
     typingTimeout.current = setTimeout(() => {
       socket.emit(STOP_TYPING, { members, chatId });
       setIamTyping(false);
-    }, [2000]);
+    }, 2000);
   };
 
-  const handleFileOpen = (e) => {
+  const handleFileOpen = (e:any) => {
     dispatch(setIsFileMenu(true));
     setFileMenuAnchor(e.currentTarget);
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = (e:any) => {
     e.preventDefault();
 
     if (!message.trim()) return;
@@ -123,7 +129,7 @@ const Chat = ({ chatId, user }) => {
   }, [chatDetails.isError]);
 
   const newMessagesListener = useCallback(
-    (data) => {
+    (data:any) => {
       console.log(data,"new message data");
       if (data.chatId !== chatId) return;
    
@@ -133,7 +139,7 @@ const Chat = ({ chatId, user }) => {
   );
 
   const startTypingListener = useCallback(
-    (data) => {
+    (data:any) => {
       if (data.chatId !== chatId) return;
 
       setUserTyping(true);
@@ -142,7 +148,7 @@ const Chat = ({ chatId, user }) => {
   );
 
   const stopTypingListener = useCallback(
-    (data) => {
+    (data:any) => {
       if (data.chatId !== chatId) return;
       setUserTyping(false);
     },
@@ -150,9 +156,9 @@ const Chat = ({ chatId, user }) => {
   );
 
   const alertListener = useCallback(
-    (data) => {
+    (data: AlertData) => {
       if (data.chatId !== chatId) return;
-      const messageForAlert = {
+      const messageForAlert  = {
         content: data.message,
         sender: {
           _id: "djasdhajksdhasdsadasdas",
@@ -176,10 +182,10 @@ const Chat = ({ chatId, user }) => {
 
   useSocketEvents(socket, eventHandler);
 
-  useErrors(errors);
 
   const allMessages = [...oldMessages, ...messages];
-
+  
+  
   return chatDetails.isLoading ? (
     <Skeleton />
   ) : (
@@ -189,13 +195,14 @@ const Chat = ({ chatId, user }) => {
         boxSizing={"border-box"}
         padding={"1rem"}
         spacing={"1rem"}
-        bgcolor={grayColor}
+        bgcolor={matBlack}
         height={"90%"}
         sx={{
           overflowX: "hidden",
           overflowY: "auto",
         }}
       >
+      
         {allMessages.map((i) => (
           <MessageComponent key={i._id} message={i} user={user} />
         ))}
@@ -217,13 +224,17 @@ const Chat = ({ chatId, user }) => {
           padding={"1rem"}
           alignItems={"center"}
           position={"relative"}
+          bgcolor={matBlack}
         >
           <IconButton
             sx={{
               position: "absolute",
               left: "1.5rem",
+            color:"white",
               rotate: "30deg",
             }}
+
+
             onClick={handleFileOpen}
           >
             <AttachFileIcon />
@@ -239,7 +250,7 @@ const Chat = ({ chatId, user }) => {
             type="submit"
             sx={{
               rotate: "-30deg",
-              bgcolor: orange,
+              bgcolor: lightGreen,
               color: "white",
               marginLeft: "1rem",
               padding: "0.5rem",
@@ -248,7 +259,7 @@ const Chat = ({ chatId, user }) => {
               },
             }}
           >
-            <SendIcon />
+            <SendIcon sx={{color:matBlack}} />
           </IconButton>
         </Stack>
       </form>
