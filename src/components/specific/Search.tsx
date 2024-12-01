@@ -3,20 +3,12 @@ import {
   DialogTitle,
   InputAdornment,
   List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Search as SearchIcon, Token } from "@mui/icons-material";
+import  { useEffect, useState } from "react";
+import { Search as SearchIcon } from "@mui/icons-material";
 import UserItem from "../shared/UserItem";
-import { sampleUsers } from "../../constants/sample";
-import axios from "axios";
-import { authApi, getToken } from "../../constants/api";
-import { useNavigate } from "react-router-dom";
-import { Server } from "../../constants/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsSearch } from "../../redux/reducers/misc";
 import {
@@ -24,14 +16,12 @@ import {
   useSendFriendRequestMutation,
 } from "../../redux/api/api";
 import toast from "react-hot-toast";
-import { useAsyncMutation } from "../../hooks/hook";
 export default function Search() {
   const [search, setSearch] = useState("");
   const { isSearch } = useSelector((state: any) => state.misc);
   const dispatch = useDispatch();
 
   const [sendFriendRequest] = useSendFriendRequestMutation();
-  const navigate = useNavigate();
   const [users, setusers] = useState([]);
 
   const addFriendHandler = async (userId:any) => {

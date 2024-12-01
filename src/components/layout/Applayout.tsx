@@ -9,6 +9,8 @@ import { getSocket } from "../../socket";
 import { useParams } from "react-router-dom";
 import { NEW_MESSAGE_ALERT } from "../../constants/events";
 import { RootState } from "../../redux/reducers/store";
+import Header from "../layout/Header"
+
 const Applayout = () => (WrapperComponent:any) => {
   return (props :any) => {
     const params = useParams();
@@ -40,6 +42,7 @@ console.log("render applayout");
 
     return (
       <div className="">
+        <Header />
         {!isLoading && (
           <Drawer open={isMobile} onClose={handleMobileClose}>
             <ChatList
@@ -50,7 +53,7 @@ console.log("render applayout");
             />
           </Drawer>
         )}
-        <Grid container className="bg-black" height={"calc(100vh - 0rem)"}>
+        <Grid container className="bg-black" height={"calc(100vh - 5rem)"}>
           <Grid
             item
             sm={4}

@@ -23,19 +23,20 @@ const NewGroup = () => {
   const dispatch = useDispatch();
   const groupName = useInputValidation("");
 
-  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
 
   const [isLoadingNewGroup,setIsLoadingNewGroup] = useState(false);
 
   const UserFriend = sampleUsers;
 
-  const selectMemberHandler = (id:string) => {
-    setSelectedMembers((prev:any) =>
+  const selectMemberHandler = (id: string) => {
+    setSelectedMembers((prev) =>
       prev.includes(id)
-        ? prev.filter((currElement:any) => currElement !== id)
-        : [...prev, id]
+        ? prev.filter((currElement) => currElement !== id) // Remove member
+        : [...prev, id] // Add member
     );
   };
+
   
   const closeHandlerNewGroup = () => {
     dispatch(setIsNewGroup(false))

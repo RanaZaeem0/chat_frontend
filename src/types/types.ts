@@ -18,6 +18,8 @@ export interface UserDataType {
   // Define the type for a message
  export interface AlertMessageType {
     content: string;
+    chatId:string;
+    message:[],
     sender: {
       _id: string;
       name: string;

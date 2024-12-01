@@ -3,7 +3,11 @@ import toast from "react-hot-toast";
 
 const useErrors = (errors = []) => {
   useEffect(() => {
-    errors.forEach(({ isError, error, fallback }) => {
+    errors.forEach(({ isError, error, fallback }:{
+      isError: any;
+       error:any;
+       fallback:any;
+    }) => {
       if (isError) {
         if (fallback) fallback();
         else toast.error(error.data.message || "something want worng ");
@@ -12,14 +16,16 @@ const useErrors = (errors = []) => {
   }, [errors]);
 };
 
-const useAsyncMutation = (mutationHook) => {
+const useAsyncMutation = (mutationHook:any) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isError, setIsError] = useState("");
   const [data, setData] = useState([]);
   const [mutate] = mutationHook();
 
-  const executeMutation = async (taostMessage, ...args) => {
+  const executeMutation = async (taostMessage:string, ...args:any) => {
+    console.log(taostMessage,"toastmesssage useAync mu");
+    
     const toastId = toast.loading("upadating data...");
     setIsLoading(true);
     try {
@@ -64,7 +70,7 @@ const useAsyncMutation = (mutationHook) => {
 };
 
 
-const useSocketEvents  = (socket,handler)=>{
+const useSocketEvents  = (socket:any,handler:any)=>{
  
 
   useEffect(()=>{

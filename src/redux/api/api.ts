@@ -3,7 +3,6 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { Server } from "../../constants/config"
-import { Provider } from "react-redux"
 
 
 
@@ -156,7 +155,7 @@ const api = createApi({
         query:({chatId})=>({
             url:`chat/${chatId}`,
             method:"DELETE",
-            credentials:"inculde",
+            credentials:"include",
 
         }),
         invalidatesTags:['Chat']

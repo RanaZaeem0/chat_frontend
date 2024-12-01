@@ -7,12 +7,12 @@ interface ChatList {
   w:string,
   chats:string[],
   chatId:string | undefined,
-  onlineUser:string[],
+  onlineUser?:string[],
   newMessagesAlert:[{
     chatId:string | undefined,
     count:number,
   }],
-  handleDeleteChat:any
+  handleDeleteChat?:any
 
 }
 

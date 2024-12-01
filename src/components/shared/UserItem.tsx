@@ -1,11 +1,10 @@
 import { Avatar, IconButton, ListItem, Stack, Typography } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
-import { UserDataType } from "../../types/types";
+import { Add as AddIcon,Remove as RemoveIcon } from "@mui/icons-material";
 function UserItem({ user, handler, handlerIsLoading,isAdded }:{
   user:any,
   handler:(id:any)=> void,
   handlerIsLoading:boolean,
-  isAdded:any
+  isAdded? :boolean
 }) {
   const { name, _id, } = user;
   console.log(isAdded);
@@ -37,7 +36,7 @@ function UserItem({ user, handler, handlerIsLoading,isAdded }:{
           onClick={() => handler(_id)}
           disabled={handlerIsLoading}
         >
-          <AddIcon />
+         {isAdded ? <RemoveIcon /> : <AddIcon />}
         </IconButton>
       </Stack>
     </ListItem>

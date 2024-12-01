@@ -32,7 +32,7 @@ import { setIsFileMenu } from "../redux/reducers/misc";
 import { removeNewMessagesAlert } from "../redux/reducers/chatSlice";
 import { TypingLoader } from "../components/layout/Loader";
 import { useNavigate } from "react-router-dom";
-import { UserDataType ,AlertData,SendMessageType} from "../types/types";
+import { UserDataType } from "../types/types";
 
 const Chat = ({ chatId, user }:{
   chatId:string,
@@ -46,7 +46,7 @@ const Chat = ({ chatId, user }:{
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<SendMessageType[]>([]);
+  const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(1);
   const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
 
@@ -66,11 +66,7 @@ const Chat = ({ chatId, user }:{
     oldMessagesChunk.data?.data?.messages
   );
 
-  const errors = [
-    { isError: chatDetails.isError, error: chatDetails.error },
-    { isError: oldMessagesChunk.isError, error: oldMessagesChunk.error },
-  ];
-  console.log(errors);
+
   
 
   const members = chatDetails?.data?.data?.members;
@@ -103,6 +99,8 @@ const Chat = ({ chatId, user }:{
 
     // Emitting the message to the server
     socket.emit(NEW_MESSAGE, { chatId, members, message });
+    console.log(message);
+    
     setMessage("");
   };
 
@@ -133,7 +131,7 @@ const Chat = ({ chatId, user }:{
       console.log(data,"new message data");
       if (data.chatId !== chatId) return;
    
-      setMessages((prev) => [...prev, data.message]);
+      setMessages((prev:any) => [...prev, data.message]);
     },
     [chatId]
   );
@@ -156,7 +154,7 @@ const Chat = ({ chatId, user }:{
   );
 
   const alertListener = useCallback(
-    (data: AlertData) => {
+    (data: any) => {
       if (data.chatId !== chatId) return;
       const messageForAlert  = {
         content: data.message,
@@ -172,7 +170,8 @@ const Chat = ({ chatId, user }:{
     },
     [chatId]
   );
-
+ console.log(messages,"type of messages");
+ 
   const eventHandler = {
     [ALERT]: alertListener,
     [NEW_MESSAGE]: newMessagesListener,
@@ -255,7 +254,7 @@ const Chat = ({ chatId, user }:{
               marginLeft: "1rem",
               padding: "0.5rem",
               "&:hover": {
-                bgcolor: "error.dark",
+                bgcolor: lightGreen,
               },
             }}
           >

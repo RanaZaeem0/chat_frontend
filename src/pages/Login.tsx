@@ -37,6 +37,7 @@ export default function Login() {
   interface loginSchema {
     username: string;
     password: string;
+
   }
 
   // Use the `useForm` hook with the appropriate schema type
@@ -49,11 +50,11 @@ export default function Login() {
 
   console.log(error);
 
-  const avatar = watch("avatar");
+  const avatar = watch("avatar") as File;
   const avatarPreview =
-    avatar && avatar[0] ? URL.createObjectURL(avatar[0]) : "avatar";
+    avatar && avatar ? URL.createObjectURL(avatar) : "avatar";
 
-  const createUser: SubmitHandler<CreateuserSchema> = async (data) => {
+  const createUser: SubmitHandler<CreateuserSchema> = async (data:CreateuserSchema) => {
     setLoadingBtn(true);
     try {
       const userData = {
@@ -137,13 +138,13 @@ export default function Login() {
     <Container
       className="bg-black text-white"
       component="main"
-      maxWidth="xs"
       sx={{
         width: "100%",
         height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor:"black"
       }}
     >
       <Paper
@@ -156,7 +157,7 @@ export default function Login() {
         }}
       >
         {isLogin ? (
-          <div className="flex item-center flex-col justify-center ">
+          <div className="flex item-center flex-col justify-center  ">
             <Typography component="h1" variant="h5">
               Login
             </Typography>

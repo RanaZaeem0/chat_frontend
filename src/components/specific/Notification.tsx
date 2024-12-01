@@ -59,8 +59,8 @@ const Notifications = () => {
           <Skeleton />
         ) : (
           <>
-            {data.data.length > 0 ? (
-              data.data.map((i:any) => (
+            {data?.data?.length > 0 ? (
+              data?.data?.map((i:any) => (
                 <NotificationItem
                   sender={i.sender}
                   _id={i._id}
@@ -91,7 +91,7 @@ const NotificationItem = memo(({ sender, _id, handler,key }:{
   console.log(avatar);
   
   return (
-    <ListItem>
+    <ListItem key={key}> 
       <Stack
         direction={"row"}
         alignItems={"center"}
