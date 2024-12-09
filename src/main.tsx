@@ -11,6 +11,7 @@ import store from "./redux/reducers/store.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+
    <Provider store={store}>
    <HelmetProvider>
       <CssBaseline />

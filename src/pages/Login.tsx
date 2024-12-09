@@ -24,6 +24,7 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loadingBtn, setLoadingBtn] = useState(false);
+console.log(error);
 
   // Typing the forms
   interface CreateuserSchema {
@@ -37,7 +38,6 @@ export default function Login() {
   interface loginSchema {
     username: string;
     password: string;
-
   }
 
   // Use the `useForm` hook with the appropriate schema type
@@ -48,13 +48,11 @@ export default function Login() {
     formState: { errors },
   } = useForm<CreateuserSchema | loginSchema>();
 
-  console.log(error);
-
   const avatar = watch("avatar") as File;
   const avatarPreview =
     avatar && avatar ? URL.createObjectURL(avatar) : "avatar";
 
-  const createUser: SubmitHandler<CreateuserSchema> = async (data:CreateuserSchema) => {
+  const createUser: SubmitHandler<CreateuserSchema> = async (data: CreateuserSchema) => {
     setLoadingBtn(true);
     try {
       const userData = {
@@ -109,6 +107,9 @@ export default function Login() {
       if (response.status >= 200 && response.status < 300) {
         setLoadingBtn(false);
         dispatch(userExited(response.data.data));
+        console.log(response.data.data.refreshToken,"token");
+        
+        localStorage.setItem('authToken',response.data.data.refreshToken)
         toast.success(response.data.message);
         navigate("/");
       }
@@ -130,6 +131,14 @@ export default function Login() {
     }
   };
 
+  const handleSubmitForm = (data: CreateuserSchema | loginSchema) => {
+    if (isLogin) {
+      loginUser(data as loginSchema);  // Type assertion for login schema
+    } else {
+      createUser(data as CreateuserSchema);  // Type assertion for createuser schema
+    }
+  };
+
   const handleLogin = () => {
     setIsLogin(!isLogin);
   };
@@ -144,7 +153,7 @@ export default function Login() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor:"black"
+        backgroundColor: "black",
       }}
     >
       <Paper
@@ -157,11 +166,11 @@ export default function Login() {
         }}
       >
         {isLogin ? (
-          <div className="flex item-center flex-col justify-center  ">
+          <div className="flex item-center flex-col justify-center ">
             <Typography component="h1" variant="h5">
               Login
             </Typography>
-            <form className="" onSubmit={handleSubmit(loginUser)}>
+            <form onSubmit={handleSubmit(handleSubmitForm)}>
               <TextField
                 margin="normal"
                 required
@@ -177,7 +186,7 @@ export default function Login() {
                     message: "Username must contain only letters and numbers",
                   },
                 })}
-              ></TextField>
+              />
               {errors.username && (
                 <Typography variant="body2" color="error">
                   {errors.username.message}
@@ -194,14 +203,14 @@ export default function Login() {
                   required: true,
                   minLength: 6,
                 })}
-              ></TextField>
+              />
               {errors.password && (
                 <Typography variant="body2" color="error">
-                  Plz make strong password and lastest 6 carateer
+                  Password must be at least 6 characters long
                 </Typography>
               )}
               <Button variant="contained" type="submit">
-                Login
+                {loadingBtn ? "Loading..." : "Login"}
               </Button>
             </form>
             <Button
@@ -216,9 +225,9 @@ export default function Login() {
         ) : (
           <>
             <Typography component="h1" variant="h5">
-              SignUp{" "}
+              SignUp
             </Typography>
-            <form onSubmit={handleSubmit(createUser)}>
+            <form onSubmit={handleSubmit(handleSubmitForm)}>
               <Stack position={"relative"} width={"10rem"} margin={"auto"}>
                 <Avatar
                   sx={{
@@ -247,7 +256,7 @@ export default function Login() {
                     accept="image/*"
                     {...register("avatar", { required: true })}
                   />
-                  {errors.avatar && (
+                  {errors && (
                     <Typography variant="body2" color="error">
                       Avatar is required
                     </Typography>
@@ -262,11 +271,6 @@ export default function Login() {
                 variant="outlined"
                 {...register("name", { required: true, minLength: 2 })}
               />
-              {errors && (
-                <Typography variant="body2" color="error">
-                  adas
-                </Typography>
-              )}
               <TextField
                 margin="normal"
                 required
@@ -276,11 +280,6 @@ export default function Login() {
                 variant="outlined"
                 {...register("bio", { required: true, minLength: 2 })}
               />
-              {errors.bio && (
-                <Typography variant="body2" color="error">
-                  Bio is required
-                </Typography>
-              )}
               <TextField
                 margin="normal"
                 required
@@ -318,20 +317,20 @@ export default function Login() {
               />
               {errors.password && (
                 <Typography variant="body2" color="error">
-                  Password is required and must be at least 6 characters
+                  Password must be at least 6 characters long
                 </Typography>
               )}
               <Button
                 sx={{
                   width: "100%",
                   marginTop: 2,
-                  padding: "10px",
-                  backgroundColor: "red",
+                  padding: 1.5,
+                  backgroundColor: "#0055AA",
                 }}
                 variant="contained"
                 type="submit"
               >
-                {loadingBtn ? "Loading..." : "SignUp"}
+                {loadingBtn ? "Loading..." : "Create Account"}
               </Button>
             </form>
             <Button

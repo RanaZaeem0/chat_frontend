@@ -42,11 +42,33 @@ const Chat = ({ chatId, user }:{
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+// Define the structure for the sender
+interface Sender {
+  _id: string;
+  name: string;
+}
+
+// Define the structure for a message
+interface Message {
+_id?:string;
+  content: string; // The message content
+  sender: Sender;  // Sender information
+  chat: string;    // Chat ID the message belongs to
+  createAt: string; // Timestamp when the message was created
+}
+
+// Define the structure for the new message data
+interface NewMessageData {
+  chatId: string;  // ID of the chat
+  message: Message; // The message details
+}
+
+
   const containerRef = useRef<HTMLDivElement | null>(null);;
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [page, setPage] = useState(1);
   const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
 
@@ -127,11 +149,12 @@ const Chat = ({ chatId, user }:{
   }, [chatDetails.isError]);
 
   const newMessagesListener = useCallback(
-    (data:any) => {
+    (data:NewMessageData) => {
       console.log(data,"new message data");
       if (data.chatId !== chatId) return;
-   
-      setMessages((prev:any) => [...prev, data.message]);
+      console.log(data,"message new messagelistnier");
+     const dataMessage = data.message 
+      setMessages((prev) => [...prev, dataMessage]);
     },
     [chatId]
   );
@@ -152,25 +175,46 @@ const Chat = ({ chatId, user }:{
     },
     [chatId]
   );
+console.log(messages,"message types");
 
+  // const alertListener = useCallback(
+  //   (data:NewMessageData) => {
+  //     if (data.chatId !== chatId) return;
+  //     const messageForAlert  = {
+  //       content: data.message,
+  //       sender: {
+  //         _id: "djasdhajksdhasdsadasdas",
+  //         name: "Admin",
+  //       },
+  //       chat: chatId,
+  //       createdAt: new Date().toISOString(),
+  //     };
+  //     console.log(messageForAlert,"message types");
+
+  //     setMessages((prev) => [...prev, messageForAlert]);
+  //   },
+  //   [chatId]
+  // );
   const alertListener = useCallback(
-    (data: any) => {
+    (data: NewMessageData) => {
       if (data.chatId !== chatId) return;
-      const messageForAlert  = {
-        content: data.message,
+      const messageForAlert: Message = {
+        content: data.message.content, // Access `content` from `data.message`
         sender: {
           _id: "djasdhajksdhasdsadasdas",
           name: "Admin",
         },
         chat: chatId,
-        createdAt: new Date().toISOString(),
+        createAt: new Date().toISOString(),
       };
-
+      console.log(messageForAlert, "message types");
+  
       setMessages((prev) => [...prev, messageForAlert]);
     },
     [chatId]
   );
- console.log(messages,"type of messages");
+  
+  console.log(messages,"type of messages");
  
   const eventHandler = {
     [ALERT]: alertListener,
@@ -202,8 +246,8 @@ const Chat = ({ chatId, user }:{
         }}
       >
       
-        {allMessages.map((i) => (
-          <MessageComponent key={i._id} message={i} user={user} />
+        {allMessages.map((i,index) => (
+          <MessageComponent key={i._id || index} message={i} user={user} />
         ))}
 
         {userTyping && <TypingLoader />}

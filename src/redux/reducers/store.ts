@@ -11,7 +11,8 @@ const store = configureStore({
     [api.reducerPath]: api.reducer,
     [miscSlice.name]: miscSlice.reducer,
   },
-  middleware: (mid) => [...mid(), api.middleware],
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware().concat(api.middleware),
 });
 
 // Define RootState type

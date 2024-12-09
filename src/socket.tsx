@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, ReactNode } from "react"
 import { Socket } from "socket.io-client"
 import io from "socket.io-client"
+import { Socket_Url } from "./constants/config"
 
 // Define the context type
 const SocketContext = createContext<Socket | undefined>(undefined)
@@ -21,9 +22,12 @@ interface SocketProviderProps {
 
 const SocketProvider = ({ children }: SocketProviderProps) => {
     const socket = useMemo(() => {
-        return io('http://localhost:3000', {
-            withCredentials: true
-        })
+        return io(Socket_Url, {
+            withCredentials: true,
+            transports: ["websocket", "polling"],
+        },
+    
+    )
     }, [])
 
     return (

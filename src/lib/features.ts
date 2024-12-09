@@ -25,12 +25,14 @@ const fileFormat = (url = "") => {
     value?:any,
     get:boolean
   }) => {
-    if (get)
-      return localStorage.getItem(key)
-        ? JSON.parse(localStorage.getItem(key))
-        : null;
-    else localStorage.setItem(key, JSON.stringify(value));
+    if (get ){
+      const item  =  localStorage.getItem(key)
+        return item ?  JSON.parse(item) : null;
+    }
+    else if(value !== undefined) localStorage.setItem(key, JSON.stringify(value));
   };
+
+  
 
 
   export {

@@ -5,11 +5,19 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { Server } from "../../constants/config"
 
 
-
+const baseQuery = fetchBaseQuery({
+    baseUrl: `${Server}`,
+    prepareHeaders: (headers) => {
+    
+  
+      // Returning the modified headers
+      return headers;
+    },
+  });
 
 const api = createApi({
     reducerPath: "api",
-    baseQuery: fetchBaseQuery({ baseUrl: `${Server}` }),
+    baseQuery,
     tagTypes: ['Chat', 'User'],
     endpoints: (builder) => ({
         myChats: builder.query({
@@ -130,7 +138,7 @@ const api = createApi({
      }),
      removeGroupMember : builder.mutation({
 
-        quary:({chatId,userId}:{
+        query:({chatId,userId}:{
             chatId:string,
             userId:string
         })=>({
