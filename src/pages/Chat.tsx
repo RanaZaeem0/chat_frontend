@@ -121,7 +121,6 @@ interface NewMessageData {
 
     // Emitting the message to the server
     socket.emit(NEW_MESSAGE, { chatId, members, message });
-    console.log(message);
     
     setMessage("");
   };
@@ -150,9 +149,7 @@ interface NewMessageData {
 
   const newMessagesListener = useCallback(
     (data:NewMessageData) => {
-      console.log(data,"new message data");
       if (data.chatId !== chatId) return;
-      console.log(data,"message new messagelistnier");
      const dataMessage = data.message 
       setMessages((prev) => [...prev, dataMessage]);
     },
@@ -175,7 +172,6 @@ interface NewMessageData {
     },
     [chatId]
   );
-console.log(messages,"message types");
 
   // const alertListener = useCallback(
   //   (data:NewMessageData) => {
@@ -207,14 +203,12 @@ console.log(messages,"message types");
         chat: chatId,
         createAt: new Date().toISOString(),
       };
-      console.log(messageForAlert, "message types");
   
       setMessages((prev) => [...prev, messageForAlert]);
     },
     [chatId]
   );
   
-  console.log(messages,"type of messages");
  
   const eventHandler = {
     [ALERT]: alertListener,

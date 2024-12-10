@@ -37,7 +37,6 @@ function App() {
         dispatch(userNotExited());
       });
   }, []);
-console.log("render app");
 
   return (
     <BrowserRouter>

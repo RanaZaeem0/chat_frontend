@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 const transformImage = (url = "", width = 100) => {
     const newUrl = url.replace("upload/", `upload/dpr_auto/w_${width}/`);
   
@@ -33,10 +35,22 @@ const fileFormat = (url = "") => {
   };
 
   
-
+  function handleApiError(errorResponse:any,toastId?:any) {
+    if ((errorResponse && errorResponse.error && errorResponse.error.data)) {
+      const { message } = errorResponse.error.data;
+      if (message) {
+        toast.error(message,{id:toastId});
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    } else {
+      toast.error("An unexpected error occurred.");
+    }
+  }
 
   export {
    getOrSaveFromStorage,
     fileFormat,
-    transformImage
+    transformImage,
+    handleApiError
   }

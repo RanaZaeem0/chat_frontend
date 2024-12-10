@@ -17,14 +17,13 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { userExited } from "../redux/reducers/auth";
+import { handleApiError } from "../lib/features";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loadingBtn, setLoadingBtn] = useState(false);
-console.log(error);
 
   // Typing the forms
   interface CreateuserSchema {
@@ -69,32 +68,23 @@ console.log(error);
           withCredentials: true,
         }
       );
-      console.log(response);
 
       if (response.status >= 200 && response.status < 300) {
         setLoadingBtn(false);
         dispatch(userExited(response.data.data));
         navigate("/");
+      }else{
+      handleApiError(response)
       }
     } catch (error: any) {
       setLoadingBtn(false);
-      if (error.response) {
-        console.log(
-          `Error response from server: ${error.response.status} - ${error.response.data}`
-        );
-        setError(`Error: ${error.response.data.message || "Server Error"}`);
-      } else if (error.request) {
-        console.log("No response received from server", error.request);
-        setError("No response received from server. Please try again later.");
-      } else {
-        console.log(`Error during signup: ${error.message}`);
-        setError(`Error: ${error.message}`);
-      }
+      toast.error(`${error.response.data.message || "cheak input"}`)
     }
   };
 
   const loginUser: SubmitHandler<loginSchema> = async (data) => {
     setLoadingBtn(true);
+   
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}user/login`,
@@ -103,7 +93,7 @@ console.log(error);
           withCredentials: true,
         }
       );
-
+  console.log(response,"login response");
       if (response.status >= 200 && response.status < 300) {
         setLoadingBtn(false);
         dispatch(userExited(response.data.data));
@@ -113,22 +103,15 @@ console.log(error);
         toast.success(response.data.message);
         navigate("/");
       }
-    } catch (error: any) {
-      setLoadingBtn(false);
-      if (error.response) {
-        toast.error(error.response.message);
-        console.log(
-          `Error response from server: ${error.response.status} - ${error.response.data}`
-        );
-        setError(`Error: ${error.response.data.message || "Server Error"}`);
-      } else if (error.request) {
-        console.log("No response received from server", error.request);
-        setError("No response received from server. Please try again later.");
-      } else {
-        console.log(`Error during signup: ${error.message}`);
-        setError(`Error: ${error.message}`);
-      }
+    } catch (error:any) {
+      setLoadingBtn(false)
+
+toast.error(`${error.response.data.message || "cheak input"}`)
+      console.log(error?.response);
+      
     }
+
+
   };
 
   const handleSubmitForm = (data: CreateuserSchema | loginSchema) => {

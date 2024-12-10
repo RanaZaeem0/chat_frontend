@@ -6,7 +6,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Search as SearchIcon } from "@mui/icons-material";
 import UserItem from "../shared/UserItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,7 @@ import {
   useSendFriendRequestMutation,
 } from "../../redux/api/api";
 import toast from "react-hot-toast";
+import { handleApiError } from "../../lib/features";
 export default function Search() {
   const [search, setSearch] = useState("");
   const { isSearch } = useSelector((state: any) => state.misc);
@@ -23,12 +24,21 @@ export default function Search() {
 
   const [sendFriendRequest] = useSendFriendRequestMutation();
   const [users, setusers] = useState([]);
-
-  const addFriendHandler = async (userId:any) => {
-    console.log("id", userId);
+  const addFriendHandler = async (userId: any) => {
 
 
-    sendFriendRequest({userId});
+    sendFriendRequest({ userId }) .then((res) => {
+      const taostid = toast.loading("sending !")
+      if (!res.error) {
+        toast.success(res.data.message,{id:taostid});
+      } else {
+        handleApiError(res,taostid)
+      }
+    })
+    .catch((res) => {
+      console.log(res);
+
+    });
   };
 
   const [userSearcher] = useLazySearchUserQuery();
@@ -37,12 +47,18 @@ export default function Search() {
     const setTimeOutId = setTimeout(() => {
       userSearcher(search)
         .then((res) => {
-          console.log(res.data.data);
-          setusers(res.data.data);
-          toast.success(res.data.message);
+      const toastId = toast.loading("search ")
+
+          if (res.isSuccess) {
+            setusers(res.data.data);
+            toast.success(res.data.message,{id:toastId});
+          } else {
+            handleApiError(res,toastId)
+          }
         })
         .catch((res) => {
           console.log(res);
+
         });
     }, 500);
 
@@ -77,7 +93,7 @@ export default function Search() {
         />
 
         <List>
-          {users.map((user,index) => {
+          {users.map((user, index) => {
             return (
               <UserItem
                 user={user}

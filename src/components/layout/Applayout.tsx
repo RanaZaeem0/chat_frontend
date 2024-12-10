@@ -22,7 +22,6 @@ const Applayout = () => (WrapperComponent:any) => {
     const { user } = useSelector((state:RootState) => state.auth);
 
     const {  isLoading,  data } = useMyChatsQuery({});
-console.log("render applayout");
 
     const { isMobile } = useSelector((state:RootState) => state.misc);
 

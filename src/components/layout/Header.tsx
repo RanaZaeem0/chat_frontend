@@ -23,6 +23,7 @@ import { Server } from "../../constants/config";
 import { resetNotificationCount } from "../../redux/reducers/chatSlice";
 import { RootState } from "../../redux/reducers/store";
 import { lightGreen } from "../../constants/color";
+import { handleApiError } from "../../lib/features";
 
 const SearchDailog = lazy(()=> import("../specific/Search"))
 const NotificationDialog = lazy(()=> import("../specific/Notification"))
@@ -55,6 +56,8 @@ dispatch(setIsMobile(true))
   }).then((res) => {
       if (res.status >= 200 && res.status < 300) {
           window.location.reload()
+      }else{
+        handleApiError(res)
       }
   }).catch((error) => {
       console.log("error",error);
