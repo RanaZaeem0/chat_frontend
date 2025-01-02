@@ -44,9 +44,13 @@ export default function ChatList({
       {chats.map((data:any,index:number) => {
         const {avatar, name, _id,groupChat, members} = data;
    
-        const newMessageAlert = newMessagesAlert.find(
-          (item) => item.chatId === _id
+        const newMessageAlert = newMessagesAlert.find(          
+          (item) => {
+            
+            return item.chatId == _id}
         )
+        console.log(newMessageAlert,"newmessagealert list .find" );
+        
       
         const isOnline = members.some(() => onlineUser.includes(_id));
 
@@ -54,7 +58,7 @@ export default function ChatList({
             <ChatItem 
             index={index}
              isOnline={isOnline}
-             newMessage={newMessageAlert}
+             newMessageAlert={newMessageAlert}
              avatar={avatar}
              name={name}
              _id={_id}

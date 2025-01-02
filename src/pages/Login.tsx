@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { userExited } from "../redux/reducers/auth";
 import { handleApiError } from "../lib/features";
+import { loginPageImg } from "../assets";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -128,21 +129,30 @@ toast.error(`${error.response.data.message || "cheak input"}`)
 
   return (
     <Container
-      className="bg-black text-white"
+      className="bg-orange-50 text-white "
       component="main"
       sx={{
         width: "100%",
+        paddingLeft:"0px"
+        ,paddingRight:"0px",
+        marginRight:"0px",
+        marginLeft:"0px",
         height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "black",
+        backgroundImage: `url(${loginPageImg})`, // Replace with your image path
+    backgroundSize: "cover", // Ensure the image covers the entire background
+    backgroundPosition: "center", // Center the image
+    backgroundRepeat: "no-repeat", // Prevent the image from repeating
       }}
     >
       <Paper
+      className="!shadow-md  !bg-transparent"
         elevation={2}
         sx={{
-          padding: 2,
+          padding: 4,
+          borderRadius:"10%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -150,7 +160,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
       >
         {isLogin ? (
           <div className="flex item-center flex-col justify-center ">
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h5" className="items-center justify-center flex ">
               Login
             </Typography>
             <form onSubmit={handleSubmit(handleSubmitForm)}>
@@ -192,7 +202,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
                   Password must be at least 6 characters long
                 </Typography>
               )}
-              <Button variant="contained" type="submit">
+              <Button variant="contained" type="submit" className="!rounded-xl !font-normal  !flex !items-center !justify-center !bg-purple-400">
                 {loadingBtn ? "Loading..." : "Login"}
               </Button>
             </form>
@@ -206,7 +216,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
             </Button>
           </div>
         ) : (
-          <>
+          <div className="w-96 ">
             <Typography component="h1" variant="h5">
               SignUp
             </Typography>
@@ -324,7 +334,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
             >
               or login
             </Button>
-          </>
+          </div>
         )}
       </Paper>
     </Container>

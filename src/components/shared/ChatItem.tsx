@@ -11,7 +11,7 @@ interface ChatItemSchema {
   _id: string;
   groupChat: boolean;
   isOnline: string;
-  newMessage: any;
+  newMessageAlert: any;
   index: number;
   handleDeleteChat: (e:any, _id:any, groupChat:boolean) => void;
 }
@@ -24,8 +24,12 @@ function ChatItem({
   groupChat = false,
   isOnline,
   index,
+  newMessageAlert,
   handleDeleteChat,
 }: ChatItemSchema) {
+
+  console.log(newMessageAlert,"cahtitem");
+  
   return (
     <Link
       to={`/chat/${_id}`}
@@ -50,6 +54,12 @@ function ChatItem({
         <AvatarCard avatar={avatar} />
         <Stack>
           <Typography>{name}</Typography>
+          {newMessageAlert && (
+            <Typography>{newMessageAlert.count} New Message</Typography>
+          )}
+        </Stack>
+        <Stack>
+          
           {isOnline && (
             <Box
               sx={{

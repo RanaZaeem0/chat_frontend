@@ -25,7 +25,7 @@ const fileFormat = (url = "") => {
   const getOrSaveFromStorage = ({ key, value, get }:{
     key:string,
     value?:any,
-    get:boolean
+    get?:boolean
   }) => {
     if (get ){
       const item  =  localStorage.getItem(key)
