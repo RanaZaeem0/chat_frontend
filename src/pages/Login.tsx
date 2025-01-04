@@ -221,7 +221,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
               SignUp
             </Typography>
             <form onSubmit={handleSubmit(handleSubmitForm)}>
-              <Stack position={"relative"} width={"10rem"} margin={"auto"}>
+              {/* <Stack position={"relative"} width={"10rem"} margin={"auto"}>
                 <Avatar
                   sx={{
                     width: "10rem",
@@ -255,7 +255,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
                     </Typography>
                   )}
                 </IconButton>
-              </Stack>
+              </Stack>  */}
               <TextField
                 margin="normal"
                 required

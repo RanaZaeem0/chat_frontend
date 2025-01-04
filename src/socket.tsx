@@ -25,9 +25,7 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
         return io(Socket_Url, {
             withCredentials: true,
             transports: ["websocket", "polling"],
-        },
-    
-    )
+        },)
     }, [])
 
     return (
