@@ -24,6 +24,10 @@ const Applayout = () => (WrapperComponent: any) => {
 
     const { isLoading, data } = useMyChatsQuery({});
 
+    // const { isLoading, data } = useMyChatsQuery({});
+    console.log(data,"chat data");
+
+
     const { isMobile } = useSelector((state: RootState) => state.misc);
     const {newMessagesAlert} = useSelector((state: RootState) => state.chat);
     // useEffect(() => {
@@ -35,11 +39,11 @@ const Applayout = () => (WrapperComponent: any) => {
     };
     const newMessageAlertListener = useCallback(
       (data: any) => {
+        console.log(data,"waht darta");
         
-        if (data.chatId == chatId) {
+        if (data.chatId == chatId) return;
           dispatch(setNewMessagesAlert(data))
-
-        }
+        
       }
       , [chatId])
     const eventHandlers = {
@@ -60,7 +64,7 @@ const Applayout = () => (WrapperComponent: any) => {
             />
           </Drawer>
         )}
-        <Grid container className="bg-black" height={"calc(100vh - 5rem)"}>
+        <Grid container className="bg-black" height={"calc(100vh - 4rem)"}>
           <Grid
             item
             sm={4}
@@ -85,7 +89,8 @@ const Applayout = () => (WrapperComponent: any) => {
             sm={8}
             md={5}
             lg={9}
-            height={"100%"}
+            height={"97%"}
+
             sx={{ borderRight: "1px solid #ccc" }}
           >
             <WrapperComponent {...props} chatId={chatId} user={user} />

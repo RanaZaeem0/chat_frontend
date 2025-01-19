@@ -49,7 +49,6 @@ export default function ChatList({
             
             return item.chatId == _id}
         )
-        console.log(newMessageAlert,"newmessagealert list .find" );
         
       
         const isOnline = members.some(() => onlineUser.includes(_id));

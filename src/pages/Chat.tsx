@@ -33,6 +33,7 @@ import { removeNewMessagesAlert } from "../redux/reducers/chatSlice";
 import { TypingLoader } from "../components/layout/Loader";
 import { useNavigate } from "react-router-dom";
 import { UserDataType } from "../types/types";
+import ChatHeader from "../components/layout/ChatHeader";
 
 const Chat = ({ chatId, user }:{
   chatId:string,
@@ -77,7 +78,8 @@ interface NewMessageData {
   const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const chatDetails = useChatDetailsQuery({ chatId, skip: !chatId });
-
+  console.log(chatDetails,"chatdetils");
+  
   const oldMessagesChunk = useGetMessagesQuery({ chatId, page });
 
   const { data: oldMessages, setData: setOldMessages } = useInfiniteScrollTop(
@@ -92,11 +94,14 @@ interface NewMessageData {
   
 
   const members = chatDetails?.data?.data?.members;
+console.log(chatDetails?.data?.data,"current open");
 
   const messageOnChange = (e:any) => {
     setMessage(e.target.value);
 
     if (!IamTyping) {
+      console.log(members,chatId,"startTpeinf");
+      
       socket.emit(START_TYPING, { members, chatId });
       setIamTyping(true);
     }
@@ -106,7 +111,7 @@ interface NewMessageData {
     typingTimeout.current = setTimeout(() => {
       socket.emit(STOP_TYPING, { members, chatId });
       setIamTyping(false);
-    }, 2000);
+    }, 1000);
   };
 
   const handleFileOpen = (e:any) => {
@@ -158,12 +163,23 @@ interface NewMessageData {
 
   const startTypingListener = useCallback(
     (data:any) => {
+      console.log("enter start tpying",data);
+      
       if (data.chatId !== chatId) return;
-
+    console.log(data.chatId,"typing cahtID");
+    
       setUserTyping(true);
     },
     [chatId]
   );
+  if(!userTyping){
+    console.log("user is tpying");
+    
+  }else{
+    console.log("user not tpying");
+
+  }
+  
 
   const stopTypingListener = useCallback(
     (data:any) => {
@@ -227,13 +243,14 @@ interface NewMessageData {
     <Skeleton />
   ) : (
     <Fragment>
+      <ChatHeader isTyping={userTyping}user={chatDetails?.data.data}/>
       <Stack
         ref={containerRef}
         boxSizing={"border-box"}
         padding={"1rem"}
         spacing={"1rem"}
         bgcolor={matBlack}
-        height={"90%"}
+        height={"80%"}
         sx={{
           overflowX: "hidden",
           overflowY: "auto",
@@ -243,8 +260,6 @@ interface NewMessageData {
         {allMessages.map((i,index) => (
           <MessageComponent key={i._id || index} message={i} user={user} />
         ))}
-
-        {userTyping && <TypingLoader />}
 
         <div ref={bottomRef} />
       </Stack>

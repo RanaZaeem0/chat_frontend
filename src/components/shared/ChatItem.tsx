@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import  { memo } from "react";
 import { Link } from "../styles/StyledComponents";
 import AvatarCard from "./AvatarCard";
-import { lightblack, matBlack } from "../../constants/color";
+import { lightblack, matBlack,lightGreen } from "../../constants/color";
 
 interface ChatItemSchema {
   avatar: [];
@@ -47,13 +47,13 @@ function ChatItem({
           textDecoration: "none",
           justifyContent: "start",
           color: sameSender ? "black" : "white",
-          backgroundColor: sameSender ? lightblack : matBlack,
+          backgroundColor: sameSender ? lightGreen : matBlack,
           position: "relative",
         }}
       >
         <AvatarCard avatar={avatar} />
         <Stack>
-          <Typography>{name}</Typography>
+          <Typography className="pl-2 flex items-center justify-center">{name}</Typography>
           {newMessageAlert && (
             <Typography>{newMessageAlert.count} New Message</Typography>
           )}

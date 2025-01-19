@@ -9,6 +9,8 @@ function AvatarCard({ avatar = [], max = 4 }) {
         <Box height={"3rem"}>
           {avatar &&
             avatar.map((i, index) => {
+         
+              
               return (
                 <Avatar
                   key={Math.random() * 100}

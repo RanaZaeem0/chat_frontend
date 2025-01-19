@@ -45,19 +45,22 @@ export default function Search() {
 
   useEffect(() => {
     const setTimeOutId = setTimeout(() => {
-      userSearcher(search)
-        .then((res) => {
       const toastId = toast.loading("search ")
+      userSearcher(search)
+      .then((res) => {
 
           if (res.isSuccess) {
             setusers(res.data.data);
             toast.success(res.data.message,{id:toastId});
           } else {
-            handleApiError(res,toastId)
+            // handleApiError(res,toastId)
+            toast.error(res.data.message,{id:toastId});
+          
           }
         })
         .catch((res) => {
           console.log(res);
+          toast.error("Retry",{id:toastId});
 
         });
     }, 500);
@@ -65,7 +68,7 @@ export default function Search() {
     return () => {
       clearTimeout(setTimeOutId);
     };
-  }, [search]);
+  }, [search.length > 1]);
 
 
   const addFriendHandlerIsLoading = false
