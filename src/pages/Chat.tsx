@@ -30,7 +30,6 @@ import { useInfiniteScrollTop } from "6pp";
 import { useDispatch } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc";
 import { removeNewMessagesAlert } from "../redux/reducers/chatSlice";
-import { TypingLoader } from "../components/layout/Loader";
 import { useNavigate } from "react-router-dom";
 import { UserDataType } from "../types/types";
 import ChatHeader from "../components/layout/ChatHeader";
