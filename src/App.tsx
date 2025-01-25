@@ -7,12 +7,11 @@ import { Server } from "./constants/config";
 import { useDispatch, useSelector } from "react-redux";
 import { userExited, userNotExited } from "./redux/reducers/auth";
 import toast, { Toaster } from "react-hot-toast";
-import { SocketProvider } from "./socket";
 import {RootState} from "./redux/reducers/store"
+import Contact from "./pages/Contact";
+import LoginTest from "./pages/login1";
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
-const Chat = lazy(() => import("./pages/Chat"));
-const Group = lazy(() => import("./pages/Group"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -44,14 +43,11 @@ function App() {
         <Routes>
           <Route
             element={
-              <SocketProvider>
                 <ProtectRoute user={user} />
-              </SocketProvider>
             }
           >
             <Route path="/" element={<Home />} />
-            <Route path="/chat/:chatId" element={<Chat />} />
-            <Route path="/group" element={<Group />} />
+            <Route path="/group" element={<Contact />} />
           </Route>
           <Route
             path="/login"
@@ -61,6 +57,9 @@ function App() {
               </ProtectRoute>
             }
           />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login1" element={<LoginTest />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

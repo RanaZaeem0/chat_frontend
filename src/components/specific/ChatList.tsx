@@ -40,7 +40,7 @@ export default function ChatList({
 
   
   return (
-    <Stack width={w} height={"column"} sx={{backgroundColor:matBlack}} >
+    <Stack width={w} height={"column"} sx={{backgroundColor:matBlack}}  className="pl-2 pt-2">
       {chats.map((data:any,index:number) => {
         const {avatar, name, _id,groupChat, members} = data;
    

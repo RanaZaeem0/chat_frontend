@@ -14,7 +14,7 @@ interface User {
 }
 
 interface AuthState {
-  user: User | null;
+  msasd: User | null;
   loader: boolean;
   isAdmin: boolean;
 }
