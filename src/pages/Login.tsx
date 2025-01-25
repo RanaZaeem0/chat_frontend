@@ -50,11 +50,7 @@ console.log(avatarPreview);
   const createUser: SubmitHandler<CreateuserSchema> = async (data: CreateuserSchema) => {
     setLoadingBtn(true);
     try {
-      const userData = {
-        username: "rana zAeem",
-        password: "1212121",
-        email: "ranazaeeem@gmail.com",
-      };
+      const userData =data
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}user/new`,

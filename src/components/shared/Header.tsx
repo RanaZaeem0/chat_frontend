@@ -12,6 +12,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { Server } from '../../constants/config';
+import axios from 'axios';
+import { handleApiError } from '../../lib/features';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -136,6 +139,16 @@ function ResponsiveAppBar() {
                 {page}
               </Button>
             ))}
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            
+              <Button
+                onClick={handleLogout}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Logout
+              </Button>
+        
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
