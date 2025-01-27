@@ -28,14 +28,15 @@ export default function Login() {
 
   // Typing the forms
   interface CreateuserSchema {
-    emial: string;
+    name: string;
     username: string;
     password: string;
     avatar: File;
+    bio: string;
   }
 
   interface loginSchema {
-    email: string;
+    username: string;
     password: string;
   }
 
@@ -54,7 +55,16 @@ export default function Login() {
   const createUser: SubmitHandler<CreateuserSchema> = async (data: CreateuserSchema) => {
     setLoadingBtn(true);
     try {
+<<<<<<< HEAD
       const userData =data
+=======
+      const userData = {
+        username: data.username,
+        password: data.password,
+        bio: data.bio,
+        name: data.name,
+      };
+>>>>>>> parent of 34aea01 (addd)
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}user/new`,
@@ -79,7 +89,6 @@ export default function Login() {
 
   const loginUser: SubmitHandler<loginSchema> = async (data) => {
     setLoadingBtn(true);
-   console.log(data,"data");
    
     try {
       const response = await axios.post(
@@ -124,7 +133,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
 
   return (
     <Container
-      className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500"
+      className="bg-orange-50 text-white "
       component="main"
       sx={{
         width: "100%",
@@ -136,6 +145,7 @@ toast.error(`${error.response.data.message || "cheak input"}`)
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundImage: `url(${loginPageImg})`, // Replace with your image path
     backgroundSize: "cover", // Ensure the image covers the entire background
     backgroundPosition: "center", // Center the image
     backgroundRepeat: "no-repeat", // Prevent the image from repeating
@@ -162,11 +172,11 @@ toast.error(`${error.response.data.message || "cheak input"}`)
                 margin="normal"
                 required
                 fullWidth
-                label="email"
+                label="username"
                 type="text"
                 variant="outlined"
                 className="!text-white"
-                {...register("email", {
+                {...register("username", {
                   required: "Username is required",
                   pattern: {
                     value: /^[a-zA-Z0-9]+$/, // pattern for no spaces or special characters
@@ -174,9 +184,9 @@ toast.error(`${error.response.data.message || "cheak input"}`)
                   },
                 })}
               />
-              {errors.emial && (
+              {errors.username && (
                 <Typography variant="body2" color="error">
-                  {errors.email.message}
+                  {errors.username.message}
                 </Typography>
               )}
               <TextField
@@ -257,6 +267,15 @@ toast.error(`${error.response.data.message || "cheak input"}`)
                 label="name"
                 variant="outlined"
                 {...register("name", { required: true, minLength: 2 })}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Bio"
+                type="text"
+                variant="outlined"
+                {...register("bio", { required: true, minLength: 2 })}
               />
               <TextField
                 margin="normal"
