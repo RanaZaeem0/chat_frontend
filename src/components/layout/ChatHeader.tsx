@@ -1,10 +1,9 @@
-
+import React from 'react'
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/reducers/store';
 import { Avatar } from '@mui/material';
 
-function ChatHeader({isTyping,user}:{
-  isTyping:boolean,
-  user:any
-}) {
+function ChatHeader({isTyping,user}) {
 
   console.log(user,"user");
   
