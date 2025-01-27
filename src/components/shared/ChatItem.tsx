@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import  { memo } from "react";
 import { Link } from "../styles/StyledComponents";
 import AvatarCard from "./AvatarCard";
-import { lightblack, matBlack,lightGreen } from "../../constants/color";
+import {  matBlack,lightGreen } from "../../constants/color";
 
 interface ChatItemSchema {
   avatar: [];

@@ -30,10 +30,6 @@ import { useInfiniteScrollTop } from "6pp";
 import { useDispatch } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc";
 import { removeNewMessagesAlert } from "../redux/reducers/chatSlice";
-<<<<<<< HEAD
-import { TypingLoader } from "../components/layout/Loader";
-=======
->>>>>>> parent of 34aea01 (addd)
 import { useNavigate } from "react-router-dom";
 import { UserDataType } from "../types/types";
 import ChatHeader from "../components/layout/ChatHeader";

@@ -1,17 +1,12 @@
 import {
-  Avatar,
   Button,
   Container,
-  IconButton,
   Paper,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
-import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -51,20 +46,17 @@ export default function Login() {
   const avatar = watch("avatar") as File;
   const avatarPreview =
     avatar && avatar ? URL.createObjectURL(avatar) : "avatar";
+console.log(avatarPreview);
 
   const createUser: SubmitHandler<CreateuserSchema> = async (data: CreateuserSchema) => {
     setLoadingBtn(true);
     try {
-<<<<<<< HEAD
-      const userData =data
-=======
       const userData = {
         username: data.username,
         password: data.password,
         bio: data.bio,
         name: data.name,
       };
->>>>>>> parent of 34aea01 (addd)
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}user/new`,
